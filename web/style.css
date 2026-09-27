@@ -1,0 +1,773 @@
+/* ==========================================================================
+   CHIQUICUP 2026 - ESTILOS BOOTSTRAP MODERNIZADOS + RETRO FOOTBALL THEME
+   ========================================================================== */
+
+:root {
+    --bg-main: #0b0e14;
+    --bg-panel: #141820;
+    --border-color: #2a3342;
+    --border-subtle: #1c232f;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    
+    /* Indicadores de posición de la regla de negocio */
+    --border-optimal: #22c55e;   /* Verde: posición óptima */
+    --border-cat: #eab308;       /* Amarillo: -3 (misma categoría) */
+    --border-diff: #ef4444;      /* Rojo: -12 (distinta categoría) */
+    
+    --pitch-green: #112818;
+    --pitch-line: rgba(255, 255, 255, 0.22);
+    --gold-accent: #d97706;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Rubik', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+}
+
+/* Tipografías personalizadas */
+.font-chakra, .font-display { font-family: 'Bebas Neue', 'Barlow Condensed', sans-serif; letter-spacing: 0.8px; }
+.font-mono, .font-condensed { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: 0.5px; }
+.tracking-wide { letter-spacing: 1px; }
+
+.badge-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Escudo y Logo ChiquiCup */
+.chiqui-logo-box {
+    width: 44px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.chiqui-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.7));
+}
+
+/* ==========================================================================
+   CANCHA TÁCTICA (4-3-3 CON MCO ADELANTADO)
+   ========================================================================== */
+
+.tactical-board {
+    position: relative;
+    background: radial-gradient(circle at center, #15381f 0%, #0d2414 70%, #07170c 100%);
+    border: 2px solid #234d2a;
+    border-radius: 6px;
+    padding: 18px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 560px;
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+}
+
+/* Líneas de Cancha Clásica */
+.pitch-lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.center-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--pitch-line);
+}
+
+.center-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 110px;
+    height: 110px;
+    border: 1px solid var(--pitch-line);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.box-penalty {
+    position: absolute;
+    left: 25%;
+    width: 50%;
+    height: 75px;
+    border: 1px solid var(--pitch-line);
+}
+.box-penalty.top { top: 0; border-top: none; }
+.box-penalty.bottom { bottom: 0; border-bottom: none; }
+
+.box-goal {
+    position: absolute;
+    left: 36%;
+    width: 28%;
+    height: 30px;
+    border: 1px solid var(--pitch-line);
+}
+.box-goal.top { top: 0; border-top: none; }
+.box-goal.bottom { bottom: 0; border-bottom: none; }
+
+/* Filas tácticas */
+.line-row {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+.line-row.forwards {
+    justify-content: space-between;
+    padding: 0 8%;
+}
+
+.line-row.am-line {
+    justify-content: center;
+    margin-top: -6px;
+    margin-bottom: -6px;
+}
+
+.line-row.mids {
+    justify-content: center;
+    gap: 80px;
+}
+
+.line-row.defenders {
+    justify-content: space-between;
+    padding: 0 4%;
+}
+
+.line-row.goalkeeper {
+    justify-content: center;
+}
+
+/* Slots Tácticos con Recuadro de Color */
+.tactical-slot {
+    background: #141820;
+    border: 2px solid #374151; /* Gris por defecto */
+    width: 96px;
+    min-height: 64px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+/* Regla de negocio: verde si es óptima, amarillo si es -3, rojo si es -12 */
+.tactical-slot.optima {
+    border: 2px solid var(--border-optimal) !important;
+}
+
+.tactical-slot.penalidad-cat {
+    border: 2px solid var(--border-cat) !important;
+}
+
+.tactical-slot.penalidad-diff {
+    border: 2px solid var(--border-diff) !important;
+}
+
+.pos-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #94a3b8;
+    background: #202630;
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin-bottom: 2px;
+}
+
+.slot-body {
+    width: 100%;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.slot-body.empty {
+    color: #64748b;
+    font-style: italic;
+    font-size: 0.7rem;
+}
+
+.player-title {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #f1f5f9;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.player-club {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #94a3b8;
+    font-size: 0.58rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 500;
+}
+
+.player-media {
+    font-family: 'Bebas Neue', 'Barlow Condensed', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #fbbf24;
+    margin-top: 1px;
+}
+
+/* ==========================================================================
+   CARTAS DE ELECCIÓN (DRAFT) - CON HOVER SUTIL Y BRILLITO ANIMADO
+   ========================================================================== */
+
+.choices-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.choice-card {
+    background: #151922;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden; /* Clave para el haz de luz y partículas */
+    
+    /* EFECTO HOVER PERO MUY LEVE */
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.22s ease, 
+                border-color 0.22s ease,
+                background-color 0.22s ease;
+}
+
+/* Elevación de solo 2px y leve resplandor */
+.choice-card:hover {
+    transform: translateY(-2px);
+    border-color: #64748b;
+    background: #1b212d;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+.choice-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 2;
+}
+
+.choice-media-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.choice-media {
+    font-family: 'Bebas Neue', 'Barlow Condensed', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 900;
+    color: #fbbf24;
+    line-height: 1;
+}
+
+/* Recuadro de Posición que anticipa el encaje (Verde / Amarillo / Rojo) */
+.choice-pos {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: #232a36;
+    color: #cbd5e1;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 2px solid var(--border-color);
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.choice-pos.optima {
+    border: 2px solid var(--border-optimal) !important;
+    background: #0f2918;
+    color: #86efac;
+}
+
+.choice-pos.penalidad-cat {
+    border: 2px solid var(--border-cat) !important;
+    background: #2a200b;
+    color: #fef08a;
+}
+
+.choice-pos.penalidad-diff {
+    border: 2px solid var(--border-diff) !important;
+    background: #2a1010;
+    color: #fca5a5;
+}
+
+.choice-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 2px;
+    position: relative;
+    z-index: 2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.choice-club {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    margin-bottom: 4px;
+    position: relative;
+    z-index: 2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.choice-cat {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-family: 'Barlow Condensed', sans-serif;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 2;
+}
+
+.btn-select {
+    background: #232a36;
+    border: 1px solid var(--border-color);
+    color: #e2e8f0;
+    font-family: 'Bebas Neue', 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.choice-card:hover .btn-select {
+    background: #2563eb;
+    border-color: #3b82f6;
+    color: #fff;
+}
+
+/* ==========================================================================
+   BRILLITOS, DESTELLOS Y SHIMMER PARA CARTAS ESPECIALES
+   ========================================================================== */
+
+/* Barrido de brillo diagonal elegante y suave */
+@keyframes shimmerBeam {
+    0% {
+        transform: rotate(25deg) translateX(-180%);
+    }
+    100% {
+        transform: rotate(25deg) translateX(220%);
+    }
+}
+
+/* Pulso de centelleo suave */
+@keyframes subtleSparkle {
+    0%, 100% { opacity: 0.3; transform: scale(0.96); }
+    50% { opacity: 0.85; transform: scale(1.04); }
+}
+
+/* Rayo de luz translúcido para cartas Oro, Diamante y Leyenda */
+.choice-card.card-oro::after,
+.choice-card.card-diamante::after,
+.choice-card.card-leyenda::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Partículas centelleantes en la esquina */
+.choice-card.card-oro::before,
+.choice-card.card-diamante::before,
+.choice-card.card-leyenda::before {
+    content: '✦';
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    font-size: 0.85rem;
+    pointer-events: none;
+    z-index: 2;
+    animation: subtleSparkle 2.4s infinite ease-in-out;
+}
+
+/* 1. CARTA ORO (+3) */
+.choice-card.card-oro {
+    border: 1.5px solid #facc15 !important;
+    background: linear-gradient(145deg, #241d0b 0%, #151922 65%);
+    box-shadow: 0 0 12px rgba(250, 204, 21, 0.25);
+}
+.choice-card.card-oro:hover {
+    transform: translateY(-2px);
+    border-color: #fde047 !important;
+    background: linear-gradient(145deg, #2d240e 0%, #1c222e 65%);
+    box-shadow: 0 4px 18px rgba(250, 204, 21, 0.45);
+}
+.choice-card.card-oro::after {
+    background: linear-gradient(60deg, transparent 42%, rgba(250, 204, 21, 0.18) 50%, transparent 58%);
+    animation: shimmerBeam 4.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+.choice-card.card-oro::before {
+    color: #fde047;
+    text-shadow: 0 0 6px rgba(250, 204, 21, 0.8);
+}
+
+/* 2. CARTA DIAMANTE (+5) */
+.choice-card.card-diamante {
+    border: 1.5px solid #c084fc !important;
+    background: linear-gradient(145deg, #250f35 0%, #151922 65%);
+    box-shadow: 0 0 14px rgba(192, 132, 252, 0.3);
+}
+.choice-card.card-diamante:hover {
+    transform: translateY(-2px);
+    border-color: #d8b4fe !important;
+    background: linear-gradient(145deg, #301344 0%, #1c222e 65%);
+    box-shadow: 0 4px 20px rgba(192, 132, 252, 0.5);
+}
+.choice-card.card-diamante::after {
+    background: linear-gradient(60deg, transparent 42%, rgba(216, 180, 254, 0.22) 50%, transparent 58%);
+    animation: shimmerBeam 4.0s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+.choice-card.card-diamante::before {
+    color: #e9d5ff;
+    text-shadow: 0 0 8px rgba(192, 132, 252, 0.8);
+}
+
+/* 3. CARTA ÍDOLO / LEYENDA */
+.choice-card.card-leyenda {
+    border: 1.5px solid #38bdf8 !important;
+    background: linear-gradient(145deg, #092638 0%, #151922 65%);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+}
+.choice-card.card-leyenda:hover {
+    transform: translateY(-2px);
+    border-color: #7dd3fc !important;
+    background: linear-gradient(145deg, #0e354e 0%, #1c222e 65%);
+    box-shadow: 0 4px 22px rgba(56, 189, 248, 0.55);
+}
+.choice-card.card-leyenda::after {
+    background: linear-gradient(60deg, transparent 42%, rgba(125, 211, 252, 0.25) 50%, transparent 58%);
+    animation: shimmerBeam 3.6s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+.choice-card.card-leyenda::before {
+    content: '👑';
+    font-size: 0.75rem;
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.9));
+}
+
+/* Badges de Rareza */
+.badge-rarity {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+.badge-rarity.badge-oro {
+    background: #facc15;
+    color: #1a150c;
+    border: 1px solid #fde047;
+    box-shadow: 0 0 8px rgba(250, 204, 21, 0.5);
+}
+
+.badge-rarity.badge-diamante {
+    background: #a855f7;
+    color: #ffffff;
+    border: 1px solid #c084fc;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.65);
+}
+
+.badge-rarity.badge-leyenda {
+    background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+    color: #ffffff;
+    border: 1px solid #7dd3fc;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
+}
+
+/* Slots Tácticos con Jugador Oro / Diamante / Leyenda */
+.tactical-slot.slot-oro {
+    box-shadow: inset 0 0 10px rgba(250, 204, 21, 0.35);
+    background: linear-gradient(180deg, #261f0d 0%, #14171d 100%);
+}
+
+.tactical-slot.slot-diamante {
+    box-shadow: inset 0 0 12px rgba(168, 85, 247, 0.45);
+    background: linear-gradient(180deg, #2a113a 0%, #14171d 100%);
+}
+
+.tactical-slot.slot-leyenda {
+    box-shadow: inset 0 0 14px rgba(56, 189, 248, 0.45);
+    background: linear-gradient(180deg, #0d2a3d 0%, #14171d 100%);
+}
+
+.player-rarity-pill {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 800;
+    padding: 1px 4px;
+    border-radius: 2px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.player-rarity-pill.oro {
+    background: #facc15;
+    color: #0b132b;
+    box-shadow: 0 0 4px rgba(250, 204, 21, 0.6);
+}
+
+.player-rarity-pill.diamante {
+    background: #a855f7;
+    color: #fff;
+    box-shadow: 0 0 6px rgba(168, 85, 247, 0.7);
+}
+
+.player-rarity-pill.leyenda {
+    background: #38bdf8;
+    color: #082f49;
+    box-shadow: 0 0 6px rgba(56, 189, 248, 0.8);
+}
+
+/* ==========================================================================
+   PARTIDO EN VIVO, PENALES Y RELATO (TICKER)
+   ========================================================================== */
+
+.ticker-log {
+    max-height: 180px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+}
+
+.ticker-item {
+    padding: 4px 8px;
+    border-left: 3px solid #64748b;
+    background: #141822;
+    border-radius: 2px;
+}
+
+.ticker-item.goal-home {
+    border-left-color: var(--border-optimal);
+    color: #86efac;
+}
+
+.ticker-item.goal-away {
+    border-left-color: var(--border-diff);
+    color: #fca5a5;
+}
+
+.ticker-item.info {
+    border-left-color: #facc15;
+    color: #fef08a;
+}
+
+/* Definición por Penales */
+.pen-dots {
+    display: flex;
+    gap: 4px;
+    min-height: 16px;
+    align-items: center;
+}
+
+.pen-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid #475569;
+    background: #1e2530;
+    display: inline-block;
+    transition: all 0.2s ease;
+}
+
+.pen-dot.scored {
+    background: #22c55e;
+    border-color: #86efac;
+    box-shadow: 0 0 6px #22c55e;
+}
+
+.pen-dot.missed {
+    background: #ef4444;
+    border-color: #fca5a5;
+    box-shadow: 0 0 6px #ef4444;
+}
+
+/* Portada de Veredicto / Crónica Periodística */
+.result-banner.win {
+    background: #0f2918;
+    border: 2px solid var(--border-optimal);
+    color: #86efac;
+}
+
+.result-banner.champion {
+    background: #1a150c;
+    border: 3px double #fbbf24;
+    color: #fef3c7;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+}
+
+.result-banner.loss {
+    background: #241212;
+    border: 2px solid var(--border-diff);
+    color: #fca5a5;
+}
+
+.banner-headline {
+    font-family: 'Bebas Neue', 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.banner-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 1px;
+    color: #fbbf24;
+}
+
+.banner-note {
+    font-size: 0.78rem;
+    color: #cbd5e1;
+    margin-top: 4px;
+    line-height: 1.4;
+}
+
+/* Resumen Final de Partida */
+.recap-match-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.recap-stats {
+    border-top: 1px dashed var(--border-subtle);
+    padding-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.recap-socials {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 8px;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    color: #94a3b8;
+}
+
+.hover-light:hover {
+    color: #f8fafc !important;
+}
+
+
+/* ==========================================================================
+   MENÚ DE MODOS PRINCIPAL (HUB CHIQUICUP & CHIQUILEAGUE)
+   ========================================================================== */
+
+.max-w-700 { max-width: 700px; }
+.max-w-1000 { max-width: 1000px; }
+
+.mode-card {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.22s ease, 
+                border-color 0.22s ease,
+                background-color 0.22s ease;
+    border-radius: 8px;
+    background: #141820;
+}
+
+.mode-card:hover {
+    transform: translateY(-3px);
+    background: #181d26;
+}
+
+.mode-card.border-warning:hover {
+    border-color: #fde047 !important;
+    box-shadow: 0 8px 24px rgba(250, 204, 21, 0.2) !important;
+}
+
+.mode-card.border-secondary:hover {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 8px 24px rgba(56, 189, 248, 0.2) !important;
+}
+
+.mode-action-btn {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    letter-spacing: 1px;
+}
+
+.mode-action-btn:hover {
+    transform: translateY(-1px);
+}

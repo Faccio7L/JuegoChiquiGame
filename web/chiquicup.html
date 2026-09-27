@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChiquiCup - Torneo Oficial &bull; Fútbol Argentino</title>
+    <meta name="description" content="ChiquiCup: Simulador de draft y playoffs de 32 clubes del fútbol argentino. No trates de entenderla, padecela.">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700&family=Bebas+Neue&family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-black text-light min-vh-100 d-flex flex-column">
+
+    <!-- Header Estilo ChiquiCup con Bootstrap -->
+    <header class="navbar navbar-expand-lg bg-black border-bottom border-secondary-subtle px-3 py-2 sticky-top shadow-sm">
+        <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div class="d-flex align-items-center gap-2">
+                <!-- Escudo con la silueta de Chiqui Tapia con el pulgar arriba ("GENIO!") -->
+                <div class="chiqui-logo-box">
+                    <svg class="chiqui-svg" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#0b132b"/>
+                                <stop offset="100%" stop-color="#1c2541"/>
+                            </linearGradient>
+                            <linearGradient id="argStripes" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#75aadb"/>
+                                <stop offset="50%" stop-color="#ffffff"/>
+                                <stop offset="100%" stop-color="#75aadb"/>
+                            </linearGradient>
+                            <linearGradient id="goldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#fde047"/>
+                                <stop offset="100%" stop-color="#b45309"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M50 4 L88 16 C88 60 76 90 50 115 C24 90 12 60 12 16 Z" fill="url(#shieldGrad)" stroke="url(#goldBorder)" stroke-width="3" stroke-linejoin="round"/>
+                        <path d="M42 16 L58 16 C58 64 54 86 50 104 C46 86 42 64 42 16 Z" fill="url(#argStripes)" opacity="0.4"/>
+                        <text x="50" y="24" font-size="7.5" fill="#facc15" text-anchor="middle" font-weight="900" letter-spacing="1">★ ★ ★</text>
+                        <g fill="#f8fafc">
+                            <path d="M46 36 C44 31 48 29 53 29 C58 29 61 31 60 36 C60 39 61 41 60 44 C59 48 56 50 53 50 C50 50 47 48 46 44 C45 41 47 39 46 36 Z"/>
+                            <path d="M46 35 C48 29 56 27 60 30 C61 32 59 34 57 34 C54 32 49 32 46 35 Z" fill="#0b132b"/>
+                            <path d="M48 43 C50 47 56 47 58 43 C57 48 49 48 48 43 Z" fill="#0b132b"/>
+                            <path d="M37 59 C37 53 44 51 53 51 C62 51 69 53 69 59 L73 80 L33 80 Z"/>
+                            <path d="M47 51 L53 63 L59 51 Z" fill="#0b132b"/>
+                            <g transform="translate(19, 39) scale(0.65)">
+                                <path d="M32 30 L40 24 L45 28 L37 36 Z" fill="#f8fafc"/>
+                                <circle cx="30" cy="24" r="7" fill="#f8fafc"/>
+                                <path d="M28 24 L28 9 C28 7 34 7 34 9 L34 24 Z" fill="#f8fafc"/>
+                                <line x1="25" y1="19" x2="33" y2="19" stroke="#0b132b" stroke-width="1.3"/>
+                                <line x1="24" y1="23" x2="33" y2="23" stroke="#0b132b" stroke-width="1.3"/>
+                                <line x1="25" y1="27" x2="33" y2="27" stroke="#0b132b" stroke-width="1.3"/>
+                            </g>
+                        </g>
+                        <path d="M19 86 L81 86 L74 97 L50 99 L26 97 Z" fill="#0b132b" stroke="url(#goldBorder)" stroke-width="1.5"/>
+                        <text x="50" y="94.5" font-family="'Bebas Neue', sans-serif" font-size="6.8" font-weight="900" fill="#facc15" text-anchor="middle" letter-spacing="0.5">CHIQUI CUP</text>
+                        <text x="50" y="108" font-family="'Barlow Condensed', sans-serif" font-size="4.2" font-weight="700" fill="#94a3b8" text-anchor="middle" letter-spacing="1">GENIO!</text>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="h5 mb-0 fw-bold font-chakra text-white tracking-wide">CHIQUI CUP</h1>
+                    <small class="text-secondary font-mono d-none d-sm-inline">NO TRATES DE ENTENDERLA, PADECELA</small>
+                </div>
+            </div>
+
+            <!-- Estado del juego en el Header -->
+            <div class="d-flex align-items-center gap-2 gap-sm-3 flex-wrap">
+                <div class="d-flex align-items-center gap-2 bg-dark px-2 px-sm-3 py-1 rounded border border-secondary">
+                    <span class="text-secondary small font-mono text-uppercase">Etapa:</span>
+                    <span id="header-phase" class="badge text-bg-info text-dark font-chakra fw-bold">Draft 1/11</span>
+                </div>
+                <div class="d-flex align-items-center gap-2 bg-dark px-2 px-sm-3 py-1 rounded border border-secondary">
+                    <span class="text-secondary small font-mono text-uppercase">Rating Once:</span>
+                    <span id="header-rating" class="badge text-bg-warning text-dark font-chakra fw-bold fs-6">0.0</span>
+                </div>
+                <a href="index.html" class="btn btn-outline-light btn-sm font-mono d-flex align-items-center gap-1 shadow-sm" title="Volver al Menú Principal"><i class="bi bi-house-door-fill"></i><span class="d-none d-md-inline">MENÚ</span></a>
+                <button id="btn-restart" class="btn btn-outline-danger btn-sm font-mono d-flex align-items-center gap-1 shadow-sm" title="Reiniciar partida">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                    <span class="d-none d-md-inline">REINICIAR</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal: Grid de 2 Columnas -->
+    <main class="container-fluid flex-grow-1 p-2 p-md-3 p-xl-4">
+        <div class="row g-3 g-xl-4 h-100">
+
+            <!-- Columna Izquierda: Cancha Táctica -->
+            <section class="col-12 col-xl-7 col-xxl-7 d-flex flex-column">
+                <div class="card bg-dark border-secondary h-100 shadow">
+                    <div class="card-header bg-black bg-opacity-60 border-secondary d-flex justify-content-between align-items-center py-2 px-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-shield-shaded text-warning"></i>
+                            <h2 class="h6 mb-0 font-chakra text-uppercase text-light tracking-wide">FORMACIÓN TITULAR (4-3-3)</h2>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 gap-sm-3 font-mono small text-secondary">
+                            <span class="d-flex align-items-center gap-1"><span class="badge-dot bg-success"></span> Óptimo</span>
+                            <span class="d-flex align-items-center gap-1"><span class="badge-dot bg-warning"></span> -3 Cat</span>
+                            <span class="d-flex align-items-center gap-1"><span class="badge-dot bg-danger"></span> -12 Pos</span>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-2 p-md-3 d-flex flex-column justify-content-center">
+                        <div class="tactical-board" id="tactical-pitch">
+                            <div class="pitch-lines">
+                                <div class="box-penalty top"></div>
+                                <div class="box-goal top"></div>
+                                <div class="center-circle"></div>
+                                <div class="center-line"></div>
+                                <div class="box-penalty bottom"></div>
+                                <div class="box-goal bottom"></div>
+                            </div>
+
+                            <!-- Delanteros (EL, DC, ED) -->
+                            <div class="line-row forwards">
+                                <div class="tactical-slot" data-slot="10" id="slot-10">
+                                    <span class="pos-tag">EL</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                                <div class="tactical-slot" data-slot="9" id="slot-9">
+                                    <span class="pos-tag">DC</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                                <div class="tactical-slot" data-slot="8" id="slot-8">
+                                    <span class="pos-tag">ED</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                            </div>
+
+                            <!-- MCO Adelantado -->
+                            <div class="line-row am-line">
+                                <div class="tactical-slot" data-slot="7" id="slot-7">
+                                    <span class="pos-tag">MCO</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                            </div>
+
+                            <!-- MCs Centrales -->
+                            <div class="line-row mids">
+                                <div class="tactical-slot" data-slot="5" id="slot-5">
+                                    <span class="pos-tag">MC</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                                <div class="tactical-slot" data-slot="6" id="slot-6">
+                                    <span class="pos-tag">MC</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                            </div>
+
+                            <!-- Defensas (LI, DFC, DFC, LD) -->
+                            <div class="line-row defenders">
+                                <div class="tactical-slot" data-slot="1" id="slot-1">
+                                    <span class="pos-tag">LI</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                                <div class="tactical-slot" data-slot="2" id="slot-2">
+                                    <span class="pos-tag">DFC</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                                <div class="tactical-slot" data-slot="3" id="slot-3">
+                                    <span class="pos-tag">DFC</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                                <div class="tactical-slot" data-slot="4" id="slot-4">
+                                    <span class="pos-tag">LD</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                            </div>
+
+                            <!-- Arquero (ARQ) -->
+                            <div class="line-row goalkeeper">
+                                <div class="tactical-slot" data-slot="0" id="slot-0">
+                                    <span class="pos-tag">ARQ</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Columna Derecha: Panel de Control (Draft o Copa) -->
+            <section class="col-12 col-xl-5 col-xxl-5 d-flex flex-column">
+
+                <!-- 1. SECCIÓN DRAFT -->
+                <div id="draft-section" class="card bg-dark border-secondary h-100 shadow">
+                    <div class="card-header bg-black bg-opacity-60 border-secondary d-flex justify-content-between align-items-center py-2 px-3 flex-wrap gap-2">
+                        <div>
+                            <h2 id="draft-round-title" class="h6 mb-0 font-chakra text-uppercase text-light tracking-wide">Ronda 1/11: Arquero</h2>
+                            <small class="text-secondary font-mono">Elige 1 de las 4 opciones</small>
+                        </div>
+                        <button id="btn-reroll-draft" class="btn btn-outline-warning btn-sm font-chakra fw-bold d-flex align-items-center gap-2 shadow-sm" title="Sortear 4 opciones nuevas">
+                            <i class="bi bi-dice-5-fill"></i>
+                            <span class="reroll-text">SORTEAR DE NUEVO</span>
+                            <span class="badge bg-warning text-dark font-mono" id="reroll-badge">3</span>
+                        </button>
+                    </div>
+
+                    <div class="card-body p-3 overflow-y-auto">
+                        <div class="choices-grid" id="choices-container">
+                            <!-- Inyectado dinámicamente por app.js -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. SECCIÓN COPA (OCULTA DURANTE EL DRAFT) -->
+                <div id="cup-section" class="card bg-dark border-secondary h-100 shadow hidden">
+                    <div class="card-header bg-black bg-opacity-60 border-secondary py-2 px-3 text-center">
+                        <h2 id="cup-stage-title" class="h5 mb-0 font-chakra text-uppercase text-warning fw-bold tracking-wide">COPA - DIECISEISAVOS DE FINAL</h2>
+                    </div>
+
+                    <div class="card-body p-3 d-flex flex-column gap-3 overflow-y-auto">
+                        <!-- Fixture del Cruce -->
+                        <div class="match-fixture bg-black bg-opacity-50 border border-secondary rounded p-3 text-center shadow-sm">
+                            <div class="row align-items-center g-2">
+                                <div class="col-5">
+                                    <div class="fixture-name font-chakra fw-bold fs-5 text-truncate">TU EQUIPO</div>
+                                    <div class="badge text-bg-warning text-dark font-chakra fw-bold" id="cup-user-rating">78.0</div>
+                                </div>
+                                <div class="col-2">
+                                    <span class="fixture-vs badge bg-secondary text-uppercase font-mono">VS</span>
+                                </div>
+                                <div class="col-5">
+                                    <div class="fixture-name font-chakra fw-bold fs-5 text-truncate text-warning" id="rival-name">Boca Juniors</div>
+                                    <div class="badge text-bg-secondary font-chakra fw-bold" id="rival-rating">80.0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botones de Acción y Velocidad -->
+                        <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
+                            <button id="btn-play-match" class="btn btn-success btn-lg font-chakra fw-bold flex-grow-1 shadow">
+                                <i class="bi bi-play-circle-fill me-1"></i> COMENZAR PARTIDO
+                            </button>
+                            <div class="speed-toggle-container d-flex align-items-center gap-2 bg-dark px-3 py-2 rounded border border-secondary">
+                                <span class="speed-label small font-mono text-secondary">Vel:</span>
+                                <button id="btn-speed-toggle" class="btn btn-sm btn-outline-warning font-mono active">1x Normal</button>
+                            </div>
+                        </div>
+
+                        <!-- Tablero de Partido en Vivo -->
+                        <div id="match-live-board" class="retro-scoreboard bg-black bg-opacity-70 border border-secondary rounded p-3 hidden shadow">
+                            <div class="scoreboard-main d-flex justify-content-between align-items-center py-2 px-3 bg-dark rounded border border-secondary mb-3">
+                                <div class="board-team text-center">
+                                    <span class="board-name font-chakra text-secondary small d-block">LOCAL</span>
+                                    <span class="board-score font-chakra fw-bold fs-2 text-white" id="live-home-score">0</span>
+                                </div>
+                                <div class="board-clock-wrapper text-center">
+                                    <span class="board-clock badge text-bg-danger font-mono fs-6 px-3 py-2" id="live-match-time">0'</span>
+                                </div>
+                                <div class="board-team text-center">
+                                    <span class="board-name font-chakra text-secondary small d-block text-truncate" id="live-away-name">RIVAL</span>
+                                    <span class="board-score font-chakra fw-bold fs-2 text-white" id="live-away-score">0</span>
+                                </div>
+                            </div>
+
+                            <!-- Tanda de Penales -->
+                            <div id="penalties-display" class="penalties-retro bg-dark p-3 rounded border border-warning mb-3 hidden">
+                                <div class="pen-header-title font-chakra text-warning fw-bold text-center mb-2">DEFINICIÓN POR PENALES</div>
+                                <div class="pen-teams-grid d-flex justify-content-between align-items-center mb-2">
+                                    <div class="pen-team-box home text-start">
+                                        <span class="pen-team-name font-mono small d-block">TU EQUIPO</span>
+                                        <div class="pen-dots d-flex gap-1 mt-1" id="pen-home-dots"></div>
+                                    </div>
+                                    <div class="pen-current-score font-chakra fw-bold fs-4 text-warning px-3" id="penalties-score-text">0 - 0</div>
+                                    <div class="pen-team-box away text-end">
+                                        <span class="pen-team-name font-mono small d-block" id="pen-away-name">RIVAL</span>
+                                        <div class="pen-dots d-flex gap-1 justify-content-end mt-1" id="pen-away-dots"></div>
+                                    </div>
+                                </div>
+                                <div class="pen-status-line text-secondary font-mono small text-center" id="pen-status-line">Preparando la serie...</div>
+                            </div>
+
+                            <!-- Relato de Goles Minuto a Minuto -->
+                            <div class="ticker-log border border-secondary rounded p-2 overflow-y-auto mb-3" id="events-log" style="max-height: 220px;">
+                                <!-- Relato dinámico -->
+                            </div>
+
+                            <!-- Portada de Resultado Clásico -->
+                            <div id="match-result-banner" class="result-banner alert text-center p-3 hidden mb-3 font-chakra">
+                                <!-- Contenido de resultado -->
+                            </div>
+
+                            <!-- Botón Siguiente Ronda -->
+                            <div class="post-match-panel hidden text-center" id="post-match-actions">
+                                <button id="btn-next-round" class="btn btn-primary btn-lg font-chakra fw-bold w-100 shadow">
+                                    <i class="bi bi-arrow-right-circle-fill me-1"></i> SIGUIENTE RONDA
+                                </button>
+                            </div>
+
+                            <!-- Panel de Fin de Partida (Campeón o Eliminado) -->
+                            <div id="game-over-panel" class="game-over-panel bg-dark p-3 rounded border border-warning text-center hidden shadow">
+                                <div class="run-recap-box mb-3" id="run-recap-content">
+                                    <!-- Resumen de campaña -->
+                                </div>
+                                <div class="game-over-actions d-flex gap-2 justify-content-center">
+                                    <button id="btn-share-run" class="btn btn-outline-info font-chakra fw-bold flex-grow-1">
+                                        <i class="bi bi-clipboard-check me-1"></i> COMPARTIR
+                                    </button>
+                                    <button id="btn-play-again" class="btn btn-warning font-chakra fw-bold flex-grow-1 text-dark">
+                                        <i class="bi bi-arrow-repeat me-1"></i> VOLVER A JUGAR
+                                    </button>
+                                </div>
+                                <div id="share-toast" class="share-toast badge text-bg-success mt-2 p-2 hidden">¡Copiado al portapapeles!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer Clásico -->
+    <footer class="retro-footer bg-black border-top border-secondary-subtle py-2 px-3 mt-auto">
+        <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap gap-2 font-mono small text-secondary">
+            <span>CHIQUI CUP &bull; FÚTBOL ARGENTINO &bull; TORNEO DE 32 CLUBES</span>
+            <div class="footer-socials d-flex align-items-center gap-2">
+                <a href="https://www.instagram.com/santifaccio/" target="_blank" rel="noopener noreferrer" class="text-secondary text-decoration-none hover-light">📸 Instagram</a>
+                <span>&bull;</span>
+                <a href="https://x.com/santifaccioo" target="_blank" rel="noopener noreferrer" class="text-secondary text-decoration-none hover-light">✖️ @santifaccioo</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

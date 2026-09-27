@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChiquiLeague - Torneo Oficial de Liga &bull; Fútbol Argentino</title>
+    <meta name="description" content="ChiquiLeague: Torneo de Liga de 30 equipos con 15 fechas, interzonal de clásicos y playoffs por el campeonato argentino.">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700&family=Bebas+Neue&family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .league-table th { font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.5px; font-size: 0.85rem; }
+        .league-table td { font-family: 'Rubik', monospace, sans-serif; font-size: 0.85rem; vertical-align: middle; }
+        .row-playoff { border-left: 3px solid #22c55e !important; background-color: rgba(34, 197, 94, 0.08) !important; }
+        .row-user { border-left: 3px solid #facc15 !important; background-color: rgba(250, 204, 21, 0.15) !important; font-weight: bold; }
+        .badge-derby { background: #b91c1c; color: #fecaca; border: 1px solid #ef4444; font-size: 0.7rem; }
+        .match-card-sm { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; }
+        .match-card-sm.is-user { border-color: #facc15; background: #1f242d; }
+        .bracket-node { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 10px; margin-bottom: 8px; }
+        .bracket-node.is-user { border-color: #facc15; box-shadow: 0 0 10px rgba(250, 204, 21, 0.2); }
+        .nav-pills .nav-link.active { background-color: #facc15; color: #0b132b; font-weight: bold; }
+    </style>
+</head>
+<body class="bg-black text-light min-vh-100 d-flex flex-column">
+
+    <!-- Header Estilo ChiquiLeague (Limpio y directo como ChiquiCup) -->
+    <header class="navbar navbar-expand-lg bg-black border-bottom border-secondary-subtle px-3 py-2 sticky-top shadow-sm">
+        <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div class="d-flex align-items-center gap-2">
+                <div class="chiqui-logo-box">
+                    <svg class="chiqui-svg" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#0b132b"/>
+                                <stop offset="100%" stop-color="#1c2541"/>
+                            </linearGradient>
+                            <linearGradient id="argStripes" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#75aadb"/>
+                                <stop offset="50%" stop-color="#ffffff"/>
+                                <stop offset="100%" stop-color="#75aadb"/>
+                            </linearGradient>
+                            <linearGradient id="goldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#fde047"/>
+                                <stop offset="100%" stop-color="#b45309"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M50 4 L88 16 C88 60 76 90 50 115 C24 90 12 60 12 16 Z" fill="url(#shieldGrad)" stroke="url(#goldBorder)" stroke-width="3" stroke-linejoin="round"/>
+                        <path d="M42 16 L58 16 C58 64 54 86 50 104 C46 86 42 64 42 16 Z" fill="url(#argStripes)" opacity="0.4"/>
+                        <text x="50" y="24" font-size="7.5" fill="#facc15" text-anchor="middle" font-weight="900" letter-spacing="1">★ ★ ★</text>
+                        <g fill="#f8fafc">
+                            <path d="M46 36 C44 31 48 29 53 29 C58 29 61 31 60 36 C60 39 61 41 60 44 C59 48 56 50 53 50 C50 50 47 48 46 44 C45 41 47 39 46 36 Z"/>
+                            <path d="M46 35 C48 29 56 27 60 30 C61 32 59 34 57 34 C54 32 49 32 46 35 Z" fill="#0b132b"/>
+                            <path d="M48 43 C50 47 56 47 58 43 C57 48 49 48 48 43 Z" fill="#0b132b"/>
+                            <path d="M37 59 C37 53 44 51 53 51 C62 51 69 53 69 59 L73 80 L33 80 Z"/>
+                            <path d="M47 51 L53 63 L59 51 Z" fill="#0b132b"/>
+                            <g transform="translate(19, 39) scale(0.65)">
+                                <path d="M32 30 L40 24 L45 28 L37 36 Z" fill="#f8fafc"/>
+                                <circle cx="30" cy="24" r="7" fill="#f8fafc"/>
+                                <path d="M28 24 L28 9 C28 7 34 7 34 9 L34 24 Z" fill="#f8fafc"/>
+                                <line x1="25" y1="19" x2="33" y2="19" stroke="#0b132b" stroke-width="1.3"/>
+                                <line x1="24" y1="23" x2="33" y2="23" stroke="#0b132b" stroke-width="1.3"/>
+                                <line x1="25" y1="27" x2="33" y2="27" stroke="#0b132b" stroke-width="1.3"/>
+                            </g>
+                        </g>
+                        <path d="M19 86 L81 86 L74 97 L50 99 L26 97 Z" fill="#0b132b" stroke="url(#goldBorder)" stroke-width="1.5"/>
+                        <text x="50" y="94.5" font-family="'Bebas Neue', sans-serif" font-size="6.5" font-weight="900" fill="#38bdf8" text-anchor="middle" letter-spacing="0.5">CHIQUI LEAGUE</text>
+                        <text x="50" y="108" font-family="'Barlow Condensed', sans-serif" font-size="4.2" font-weight="700" fill="#94a3b8" text-anchor="middle" letter-spacing="1">30 EQUIPOS &bull; PLAYOFFS</text>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="h5 mb-0 fw-bold font-chakra text-white tracking-wide">CHIQUI LEAGUE</h1>
+                    <small class="text-secondary font-mono d-none d-sm-inline">TORNEO DE PRIMERA DIVISIÓN</small>
+                </div>
+            </div>
+
+            <!-- Estado del juego en el Header (Limpio y directo como ChiquiCup) -->
+            <div class="d-flex align-items-center gap-2 gap-sm-3 flex-wrap">
+                <div class="d-flex align-items-center gap-2 bg-dark px-3 py-1 rounded border border-secondary">
+                    <span class="text-secondary small font-mono text-uppercase">Media Once:</span>
+                    <span id="header-rating" class="badge text-bg-warning text-dark font-chakra fw-bold fs-6">0.0</span>
+                </div>
+                <a href="index.html" class="btn btn-outline-light btn-sm font-mono d-flex align-items-center gap-1 shadow-sm" title="Volver al Menú Principal">
+                    <i class="bi bi-house-door-fill"></i><span class="d-none d-md-inline">MENÚ</span>
+                </a>
+                <button id="btn-restart" class="btn btn-outline-danger btn-sm font-mono d-flex align-items-center gap-1 shadow-sm" title="Reiniciar liga">
+                    <i class="bi bi-arrow-counterclockwise"></i><span class="d-none d-md-inline">REINICIAR</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="container-fluid py-3 px-2 px-md-4 flex-grow-1">
+        <div class="row g-3 g-xl-4 h-100">
+
+            <!-- Columna Izquierda: Cancha Táctica idéntica a ChiquiCup -->
+            <section class="col-12 col-xl-6 col-xxl-6 d-flex flex-column">
+                <div class="card bg-dark border-secondary h-100 shadow">
+                    <div class="card-header bg-black bg-opacity-60 border-secondary d-flex justify-content-between align-items-center py-2 px-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-shield-shaded text-warning"></i>
+                            <h2 class="h6 mb-0 font-chakra text-uppercase text-light tracking-wide" id="pitch-team-title">ONCE TITULAR (4-3-3)</h2>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 gap-sm-3 font-mono small text-secondary">
+                            <span class="d-flex align-items-center gap-1"><span class="badge-dot bg-success"></span> Óptimo</span>
+                            <span class="d-flex align-items-center gap-1"><span class="badge-dot bg-warning"></span> -3 Cat</span>
+                            <span class="d-flex align-items-center gap-1"><span class="badge-dot bg-danger"></span> -12 Pos</span>
+                        </div>
+                    </div>
+                    <div class="card-body p-2 p-md-3 d-flex flex-column justify-content-center">
+                        <div class="tactical-board" id="tactical-pitch">
+                            <!-- Líneas de la Cancha -->
+                            <div class="pitch-lines">
+                                <div class="box-penalty top"></div>
+                                <div class="box-goal top"></div>
+                                <div class="center-circle"></div>
+                                <div class="center-line"></div>
+                                <div class="box-penalty bottom"></div>
+                                <div class="box-goal bottom"></div>
+                            </div>
+
+                            <!-- Delanteros (EI, DC, ED) -->
+                            <div class="line-row forwards">
+                                <div class="tactical-slot" data-slot="10" id="slot-10">
+                                    <span class="pos-tag">EI</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                                <div class="tactical-slot" data-slot="9" id="slot-9">
+                                    <span class="pos-tag">DC</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                                <div class="tactical-slot" data-slot="8" id="slot-8">
+                                    <span class="pos-tag">ED</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                            </div>
+
+                            <!-- MCO Adelantado -->
+                            <div class="line-row am-line">
+                                <div class="tactical-slot" data-slot="7" id="slot-7">
+                                    <span class="pos-tag">MCO</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                            </div>
+
+                            <!-- MCs Centrales -->
+                            <div class="line-row mids">
+                                <div class="tactical-slot" data-slot="5" id="slot-5">
+                                    <span class="pos-tag">MC</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                                <div class="tactical-slot" data-slot="6" id="slot-6">
+                                    <span class="pos-tag">MC</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                            </div>
+
+                            <!-- Defensas (LI, DFC, DFC, LD) -->
+                            <div class="line-row defenders">
+                                <div class="tactical-slot" data-slot="1" id="slot-1">
+                                    <span class="pos-tag">LI</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                                <div class="tactical-slot" data-slot="2" id="slot-2">
+                                    <span class="pos-tag">DFC</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                                <div class="tactical-slot" data-slot="3" id="slot-3">
+                                    <span class="pos-tag">DFC</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                                <div class="tactical-slot" data-slot="4" id="slot-4">
+                                    <span class="pos-tag">LD</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                            </div>
+
+                            <!-- Arquero (ARQ) -->
+                            <div class="line-row goalkeeper">
+                                <div class="tactical-slot" data-slot="0" id="slot-0">
+                                    <span class="pos-tag">ARQ</span>
+                                    <div class="slot-body empty">Vacío</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Columna Derecha: Secciones Dinámicas de la Liga -->
+            <section class="col-12 col-xl-6 col-xxl-6 d-flex flex-column">
+
+                <!-- 1. SECCIÓN DRAFT (Rondas 1 a 11) -->
+                <div id="draft-section" class="card bg-dark border-secondary h-100 shadow">
+                    <div class="card-header bg-black bg-opacity-50 border-secondary d-flex justify-content-between align-items-center py-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-card-checklist text-info"></i>
+                            <h2 id="draft-round-title" class="h6 mb-0 font-chakra text-uppercase text-light tracking-wide">Ronda 1/11: Arquero</h2>
+                        </div>
+                        <button id="btn-reroll-draft" class="btn btn-outline-warning btn-sm font-chakra fw-bold d-flex align-items-center gap-2 shadow-sm" title="Sortear 4 opciones nuevas">
+                            <i class="bi bi-dice-5-fill"></i>
+                            <span>RE-SORTEAR</span>
+                            <span class="badge bg-warning text-dark font-mono" id="reroll-badge">3</span>
+                        </button>
+                    </div>
+                    <div class="card-body p-3">
+                        <small class="text-secondary font-mono d-block mb-3">Elegí 1 de las 4 opciones</small>
+                        <div class="choices-grid" id="choices-container">
+                            <!-- Las 4 cartas se inyectan acá vía JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. SECCIÓN FASE REGULAR (15 Fechas de Liga) -->
+                <div id="league-section" class="card bg-dark border-secondary h-100 shadow d-none">
+                    <div class="card-header bg-black bg-opacity-50 border-secondary d-flex justify-content-between align-items-center py-2 flex-wrap gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-calendar3 text-warning"></i>
+                            <h2 id="league-matchday-title" class="h6 mb-0 font-chakra text-uppercase text-warning fw-bold tracking-wide">FECHA 1 / 15</h2>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <div id="derby-indicator" class="badge badge-derby px-2 py-1 text-uppercase d-none">
+                                <i class="bi bi-fire me-1"></i> Interzonal
+                            </div>
+                            <div id="speed-toggle-league-container" class="btn-group btn-group-sm" role="group">
+                                <button id="btn-speed-toggle" class="btn btn-sm btn-outline-warning font-mono active">1x Normal</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3">
+
+                        <!-- Banner del Próximo Partido de Tu Equipo -->
+                        <div id="user-match-preview-card" class="card bg-black border-warning border-opacity-50 p-3 mb-3 shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <span class="font-chakra fw-bold fs-4 text-white" id="match-home-name">ChiquiTeam</span>
+                                        <span class="badge bg-warning text-dark font-mono fs-6" id="match-home-rating">78</span>
+                                        <span class="text-secondary font-display fs-5 px-2">VS</span>
+                                        <span class="font-chakra fw-bold fs-4 text-warning" id="match-away-name">Boca Juniors</span>
+                                        <span class="badge bg-secondary font-mono fs-6" id="match-away-rating">77</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button id="btn-play-fecha" class="btn btn-warning btn-lg font-chakra fw-bold text-dark px-4 py-2 shadow">
+                                        <i class="bi bi-play-fill me-1"></i> JUGAR FECHA
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Marcador de Partido en Vivo en Tiempo Real -->
+                        <div id="match-live-board" class="retro-scoreboard bg-black bg-opacity-70 border border-secondary rounded p-3 mb-3 shadow d-none">
+                            <div class="scoreboard-main d-flex justify-content-between align-items-center py-2 px-3 bg-dark rounded border border-secondary mb-3">
+                                <div class="board-team text-center" style="width: 38%;">
+                                    <span class="board-name font-chakra text-warning fw-bold fs-5 text-truncate d-block" id="live-home-name">ChiquiTeam</span>
+                                    <span class="board-score font-chakra fw-bold fs-1 text-white" id="live-home-score">0</span>
+                                </div>
+                                <div class="board-clock-wrapper text-center" style="width: 24%;">
+                                    <span class="board-clock badge text-bg-danger font-mono fs-5 px-3 py-2 shadow-sm" id="live-match-time">0'</span>
+                                </div>
+                                <div class="board-team text-center" style="width: 38%;">
+                                    <span class="board-name font-chakra text-light fw-bold fs-5 text-truncate d-block" id="live-away-name">Rival</span>
+                                    <span class="board-score font-chakra fw-bold fs-1 text-white" id="live-away-score">0</span>
+                                </div>
+                            </div>
+
+                            <!-- Relato de Goles en Tiempo Real -->
+                            <div class="events-log-container bg-dark bg-opacity-50 p-2 rounded border border-secondary border-opacity-50 mb-3" style="max-height: 140px; overflow-y: auto;">
+                                <div class="events-log d-flex flex-column gap-1" id="events-log">
+                                    <div class="ticker-item info font-mono small text-secondary">Comienza el encuentro.</div>
+                                </div>
+                            </div>
+
+                            <!-- Banner de Resultado Final del Partido -->
+                            <div id="match-result-banner" class="alert alert-dark border-secondary text-center py-2 mb-0 d-none">
+                                <span class="font-chakra fw-bold fs-5" id="match-result-text">Resultado final</span>
+                            </div>
+                        </div>
+
+                        <!-- Pestañas para Tablas de Posiciones y Resultados -->
+                        <ul class="nav nav-tabs border-secondary mb-3" id="leagueTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active font-chakra text-uppercase py-2" id="tab-zona-a-btn" data-bs-toggle="tab" data-bs-target="#tab-zona-a" type="button" role="tab">
+                                    <i class="bi bi-table me-1"></i> Zona A
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link font-chakra text-uppercase py-2" id="tab-zona-b-btn" data-bs-toggle="tab" data-bs-target="#tab-zona-b" type="button" role="tab">
+                                    <i class="bi bi-table me-1"></i> Zona B
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link font-chakra text-uppercase py-2" id="tab-fecha-matches-btn" data-bs-toggle="tab" data-bs-target="#tab-fecha-matches" type="button" role="tab">
+                                    <i class="bi bi-list-check me-1"></i> Partidos de la Fecha
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="leagueTabsContent">
+                            <!-- TABLA ZONA A -->
+                            <div class="tab-pane fade show active" id="tab-zona-a" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-hover table-sm align-middle league-table mb-1">
+                                        <thead>
+                                            <tr class="text-secondary text-uppercase border-secondary">
+                                                <th class="text-center" style="width: 40px;">#</th>
+                                                <th>Club</th>
+                                                <th class="text-center" title="Partidos Jugados">PJ</th>
+                                                <th class="text-center" title="Ganados">PG</th>
+                                                <th class="text-center" title="Empatados">PE</th>
+                                                <th class="text-center" title="Perdidos">PP</th>
+                                                <th class="text-center" title="Goles a Favor">GF</th>
+                                                <th class="text-center" title="Goles en Contra">GC</th>
+                                                <th class="text-center" title="Diferencia de Gol">DIF</th>
+                                                <th class="text-center text-warning" title="Puntos">PTS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="standings-a-body">
+                                            <!-- Inyectado por JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <small class="text-secondary font-mono d-block mt-1">1º al 8º clasifican a playoffs</small>
+                            </div>
+
+                            <!-- TABLA ZONA B -->
+                            <div class="tab-pane fade" id="tab-zona-b" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-hover table-sm align-middle league-table mb-1">
+                                        <thead>
+                                            <tr class="text-secondary text-uppercase border-secondary">
+                                                <th class="text-center" style="width: 40px;">#</th>
+                                                <th>Club</th>
+                                                <th class="text-center" title="Partidos Jugados">PJ</th>
+                                                <th class="text-center" title="Ganados">PG</th>
+                                                <th class="text-center" title="Empatados">PE</th>
+                                                <th class="text-center" title="Perdidos">PP</th>
+                                                <th class="text-center" title="Goles a Favor">GF</th>
+                                                <th class="text-center" title="Goles en Contra">GC</th>
+                                                <th class="text-center" title="Diferencia de Gol">DIF</th>
+                                                <th class="text-center text-warning" title="Puntos">PTS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="standings-b-body">
+                                            <!-- Inyectado por JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <small class="text-secondary font-mono d-block mt-1">1º al 8º clasifican a playoffs</small>
+                            </div>
+
+                            <!-- PARTIDOS DE LA FECHA -->
+                            <div class="tab-pane fade" id="tab-fecha-matches" role="tabpanel">
+                                <div class="row g-2" id="fecha-matches-container">
+                                    <!-- Inyectado por JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 3. SECCIÓN PLAYOFFS (Octavos, Cuartos, Semis, Final) + TABLAS SIEMPRE DISPONIBLES -->
+                <div id="playoff-section" class="card bg-dark border-secondary h-100 shadow d-none">
+                    <div class="card-header bg-black bg-opacity-50 border-secondary d-flex justify-content-between align-items-center py-2 flex-wrap gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-trophy-fill text-warning"></i>
+                            <h2 id="playoff-stage-title" class="h6 mb-0 font-chakra text-uppercase text-warning fw-bold tracking-wide">PLAYOFFS: OCTAVOS DE FINAL</h2>
+                        </div>
+                        <div id="speed-toggle-playoff-container" class="btn-group btn-group-sm" role="group">
+                            <button id="btn-speed-toggle-playoff" class="btn btn-sm btn-outline-warning font-mono active">1x Normal</button>
+                        </div>
+                    </div>
+                    <div class="card-body p-3">
+
+                        <!-- Selector de Vistas: Cuadro de Playoffs o Tablas de Posiciones de la Liga -->
+                        <ul class="nav nav-pills border-secondary mb-3 gap-2" id="playoffViewNav" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active font-chakra text-uppercase py-1 px-3 border border-secondary" id="nav-bracket-btn" data-bs-toggle="pill" data-bs-target="#view-playoff-bracket" type="button" role="tab">
+                                    <i class="bi bi-diagram-2-fill me-1 text-warning"></i> Cuadro de Playoffs
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link font-chakra text-uppercase py-1 px-3 border border-secondary" id="nav-standings-btn" data-bs-toggle="pill" data-bs-target="#view-playoff-standings" type="button" role="tab">
+                                    <i class="bi bi-table me-1 text-info"></i> Tablas de Posiciones (15 Fechas)
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="playoffViewContent">
+                            <!-- VISTA 1: CRUCES DE PLAYOFFS -->
+                            <div class="tab-pane fade show active" id="view-playoff-bracket" role="tabpanel">
+
+                                <!-- Mensaje discreto si no clasificó -->
+                                <div id="playoff-user-status-card" class="d-none"></div>
+
+                                <!-- Próximo cruce eliminatorio con las dos medias visibles -->
+                                <div id="playoff-next-match-box" class="card bg-black border-warning border-opacity-50 p-3 mb-3 shadow-sm d-none">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                                        <div>
+                                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                <span class="font-chakra fw-bold fs-4 text-white" id="playoff-home-name">ChiquiTeam</span>
+                                                <span class="badge bg-warning text-dark font-mono fs-6" id="playoff-home-rating">78</span>
+                                                <span class="text-secondary font-display fs-5 px-2">VS</span>
+                                                <span class="font-chakra fw-bold fs-4 text-warning" id="playoff-away-name">Rival</span>
+                                                <span class="badge bg-secondary font-mono fs-6" id="playoff-away-rating">80</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button id="btn-play-playoff" class="btn btn-warning btn-lg font-chakra fw-bold text-dark px-4 py-2 shadow">
+                                                <i class="bi bi-play-fill me-1"></i> JUGAR PARTIDO
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Marcador en Vivo de Playoffs -->
+                                <div id="playoff-live-board" class="retro-scoreboard bg-black bg-opacity-70 border border-secondary rounded p-3 mb-3 shadow d-none">
+                                    <div class="scoreboard-main d-flex justify-content-between align-items-center py-2 px-3 bg-dark rounded border border-secondary mb-3">
+                                        <div class="board-team text-center" style="width: 38%;">
+                                            <span class="board-name font-chakra text-warning fw-bold fs-5 text-truncate d-block" id="playoff-live-home-name">ChiquiTeam</span>
+                                            <span class="board-score font-chakra fw-bold fs-1 text-white" id="playoff-live-home-score">0</span>
+                                        </div>
+                                        <div class="board-clock-wrapper text-center" style="width: 24%;">
+                                            <span class="board-clock badge text-bg-danger font-mono fs-5 px-3 py-2 shadow-sm" id="playoff-live-match-time">0'</span>
+                                        </div>
+                                        <div class="board-team text-center" style="width: 38%;">
+                                            <span class="board-name font-chakra text-light fw-bold fs-5 text-truncate d-block" id="playoff-live-away-name">Rival</span>
+                                            <span class="board-score font-chakra fw-bold fs-1 text-white" id="playoff-live-away-score">0</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tanda de Penales en Playoffs -->
+                                    <div id="playoff-penalties-display" class="bg-dark p-3 rounded border border-warning mb-3 d-none">
+                                        <div class="pen-header-title font-chakra text-warning fw-bold text-center mb-2">DEFINICIÓN POR PENALES</div>
+                                        <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                            <div class="text-start">
+                                                <span class="font-mono small d-block text-secondary" id="playoff-pen-home-name">ChiquiTeam</span>
+                                                <div class="pen-dots d-flex gap-1 mt-1" id="playoff-pen-home-dots"></div>
+                                            </div>
+                                            <div class="font-chakra fw-bold fs-4 text-warning px-3" id="playoff-penalties-score-text">0 - 0</div>
+                                            <div class="text-end">
+                                                <span class="font-mono small d-block text-secondary" id="playoff-pen-away-name">Rival</span>
+                                                <div class="pen-dots d-flex gap-1 justify-content-end mt-1" id="playoff-pen-away-dots"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Relato de Goles en Playoffs -->
+                                    <div class="events-log-container bg-dark bg-opacity-50 p-2 rounded border border-secondary border-opacity-50 mb-3" style="max-height: 140px; overflow-y: auto;">
+                                        <div class="events-log d-flex flex-column gap-1" id="playoff-events-log">
+                                            <!-- Inyectado por JS -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Banner de Resultado del Playoff -->
+                                    <div id="playoff-result-banner" class="alert alert-dark border-secondary text-center py-2 mb-0 d-none">
+                                        <span class="font-chakra fw-bold fs-5" id="playoff-result-text">Resultado</span>
+                                    </div>
+                                </div>
+
+                                <!-- Llaves de la ronda de playoffs actual -->
+                                <h3 class="h6 font-chakra text-uppercase text-secondary tracking-wide mb-2">Llaves de la Ronda:</h3>
+                                <div class="row g-2 mb-3" id="playoff-bracket-container">
+                                    <!-- Inyectado por JS -->
+                                </div>
+                            </div>
+
+                            <!-- VISTA 2: TABLAS DE POSICIONES (DISPONIBLES ANTES, DURANTE Y DESPUÉS DE PLAYOFFS) -->
+                            <div class="tab-pane fade" id="view-playoff-standings" role="tabpanel">
+                                <ul class="nav nav-tabs border-secondary mb-3" id="playoffStandingsTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active font-chakra text-uppercase py-1 px-3" id="tab-p-zona-a-btn" data-bs-toggle="tab" data-bs-target="#tab-p-zona-a" type="button" role="tab">
+                                            <i class="bi bi-table me-1"></i> Zona A
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link font-chakra text-uppercase py-1 px-3" id="tab-p-zona-b-btn" data-bs-toggle="tab" data-bs-target="#tab-p-zona-b" type="button" role="tab">
+                                            <i class="bi bi-table me-1"></i> Zona B
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="playoffStandingsContent">
+                                    <div class="tab-pane fade show active" id="tab-p-zona-a" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table table-dark table-hover table-sm align-middle league-table mb-1">
+                                                <thead>
+                                                    <tr class="text-secondary text-uppercase border-secondary">
+                                                        <th class="text-center" style="width: 40px;">#</th>
+                                                        <th>Club</th>
+                                                        <th class="text-center" title="Partidos Jugados">PJ</th>
+                                                        <th class="text-center" title="Ganados">PG</th>
+                                                        <th class="text-center" title="Empatados">PE</th>
+                                                        <th class="text-center" title="Perdidos">PP</th>
+                                                        <th class="text-center" title="Goles a Favor">GF</th>
+                                                        <th class="text-center" title="Goles en Contra">GC</th>
+                                                        <th class="text-center" title="Diferencia de Gol">DIF</th>
+                                                        <th class="text-center text-warning" title="Puntos">PTS</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="playoff-standings-a-body">
+                                                    <!-- Inyectado por JS -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <small class="text-secondary font-mono d-block mt-1">1º al 8º clasificaron a playoffs</small>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab-p-zona-b" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table table-dark table-hover table-sm align-middle league-table mb-1">
+                                                <thead>
+                                                    <tr class="text-secondary text-uppercase border-secondary">
+                                                        <th class="text-center" style="width: 40px;">#</th>
+                                                        <th>Club</th>
+                                                        <th class="text-center" title="Partidos Jugados">PJ</th>
+                                                        <th class="text-center" title="Ganados">PG</th>
+                                                        <th class="text-center" title="Empatados">PE</th>
+                                                        <th class="text-center" title="Perdidos">PP</th>
+                                                        <th class="text-center" title="Goles a Favor">GF</th>
+                                                        <th class="text-center" title="Goles en Contra">GC</th>
+                                                        <th class="text-center" title="Diferencia de Gol">DIF</th>
+                                                        <th class="text-center text-warning" title="Puntos">PTS</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="playoff-standings-b-body">
+                                                    <!-- Inyectado por JS -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <small class="text-secondary font-mono d-block mt-1">1º al 8º clasificaron a playoffs</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PANEL DE FIN DE PARTIDA / RESUMEN DE CAMPAÑA (ESTILO CHIQUICUP) -->
+                        <div id="game-over-panel" class="game-over-panel bg-dark p-3 rounded border border-warning text-center d-none shadow my-3">
+                            <div class="run-recap-box mb-3" id="run-recap-content">
+                                <!-- Inyectado dinámicamente con el mismo formato que ChiquiCup -->
+                            </div>
+                            <div class="game-over-actions d-flex gap-2 justify-content-center flex-wrap">
+                                <button id="btn-share-run" class="btn btn-outline-info font-chakra fw-bold flex-grow-1">
+                                    <i class="bi bi-clipboard-check me-1"></i> COMPARTIR
+                                </button>
+                                <button id="btn-play-again" class="btn btn-warning font-chakra fw-bold flex-grow-1 text-dark">
+                                    <i class="bi bi-arrow-repeat me-1"></i> VOLVER A JUGAR
+                                </button>
+                            </div>
+                            <div id="share-toast" class="share-toast badge text-bg-success mt-2 p-2 d-none">¡Copiado al portapapeles!</div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="retro-footer bg-black border-top border-secondary-subtle py-3 px-3 mt-auto">
+        <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2 font-mono small text-secondary">
+            <span>CHIQUI LEAGUE &bull; 30 EQUIPOS &bull; 15 FECHAS &bull; PLAYOFFS</span>
+            <div class="footer-socials d-flex align-items-center gap-3">
+                <a href="https://www.instagram.com/santifaccio/" target="_blank" rel="noopener noreferrer" class="text-secondary text-decoration-none hover-light">📸 Instagram: @santifaccio</a>
+                <span>&bull;</span>
+                <a href="https://x.com/santifaccioo" target="_blank" rel="noopener noreferrer" class="text-secondary text-decoration-none hover-light">✖️ @santifaccioo</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script de ChiquiLeague -->
+    <script src="chiquileague.js"></script>
+</body>
+</html>
