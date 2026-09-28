@@ -199,11 +199,18 @@
                             <h2 id="draft-round-title" class="h6 mb-0 font-chakra text-uppercase text-light tracking-wide">Ronda 1/11: Arquero</h2>
                             <small class="text-secondary font-mono">Elige 1 de las 4 opciones</small>
                         </div>
-                        <button id="btn-reroll-draft" class="btn btn-outline-warning btn-sm font-chakra fw-bold d-flex align-items-center gap-2 shadow-sm" title="Sortear 4 opciones nuevas">
-                            <i class="bi bi-dice-5-fill"></i>
-                            <span class="reroll-text">SORTEAR DE NUEVO</span>
-                            <span class="badge bg-warning text-dark font-mono" id="reroll-badge">3</span>
-                        </button>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <button id="btn-reroll-draft" class="btn btn-outline-warning btn-sm font-chakra fw-bold d-flex align-items-center gap-2 shadow-sm" title="Sortear 4 opciones nuevas">
+                                <i class="bi bi-dice-5-fill"></i>
+                                <span class="reroll-text">SORTEAR DE NUEVO</span>
+                                <span class="badge bg-warning text-dark font-mono" id="reroll-badge">3</span>
+                            </button>
+                            <button id="btn-bonus-reroll" class="btn btn-warning btn-sm font-chakra fw-bold d-none align-items-center gap-1 shadow-sm text-dark btn-bonus-reroll-pulse" title="Obtener +1 re-sorteo extra viendo un anuncio">
+                                <i class="bi bi-gift-fill"></i>
+                                <span>+1 RE-SORTEO</span>
+                                <span class="badge bg-black text-warning font-mono" id="bonus-reroll-badge">3</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="card-body p-3 overflow-y-auto">
@@ -336,6 +343,51 @@
             </div>
         </div>
     </main>
+
+        <!-- MODAL DE RE-SORTEO EXTRA (ANUNCIO RECOMPENSADO) -->
+    <div class="modal fade" id="bonusRerollModal" tabindex="-1" aria-labelledby="bonusRerollModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark border border-warning shadow-lg text-light">
+                <div class="modal-header border-secondary bg-black bg-opacity-60">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-gift-fill text-warning fs-4"></i>
+                        <h5 class="modal-title font-chakra fw-bold tracking-wide" id="bonusRerollModalLabel">RE-SORTEO EXTRA DE DRAFT</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3 p-md-4 text-center">
+                    <p class="font-mono text-secondary mb-3 small">
+                        ¿Te quedaste sin re-sorteos? Mirá el anuncio de nuestros sponsors para desbloquear <strong class="text-warning">+1 tiro extra</strong> para armar tu Once Titular.
+                    </p>
+                    
+                    <div class="bonus-ad-box bg-black bg-opacity-50 border border-secondary border-opacity-40 rounded p-2 mb-3 text-center d-flex flex-column align-items-center justify-content-center">
+                        <div class="small font-mono text-secondary text-uppercase mb-1" style="font-size: 0.68rem; letter-spacing: 1px;">Espacio de Patrocinio</div>
+                        <div class="ad-slot-wrapper bg-black bg-opacity-40 border border-secondary border-opacity-30 rounded p-1 text-center" style="min-height: 90px; width: 100%; max-width: 728px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                            <script>
+                                atOptions = {
+                                    'key' : '5d71f48464920c62c778b39a3245c378',
+                                    'format' : 'iframe',
+                                    'height' : 90,
+                                    'width' : 728,
+                                    'params' : {}
+                                };
+                            </script>
+                            <script src="https://www.highrevenueformat.com/5d71f48464920c62c778b39a3245c378/invoke.js"></script>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column gap-2 align-items-center">
+                        <button type="button" id="btn-claim-bonus-reroll" class="btn btn-warning btn-lg font-chakra fw-bold px-4 fs-5 text-dark w-100 shadow" disabled>
+                            <i class="bi bi-hourglass-split me-1"></i> ESPERÁ <span id="bonus-countdown">3</span>s...
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary font-mono btn-sm" data-bs-dismiss="modal">
+                            Elegir de las cartas actuales
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer class="retro-footer bg-black border-top border-secondary-subtle py-2 px-3 mt-auto">
         <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap gap-2 font-mono small text-secondary">

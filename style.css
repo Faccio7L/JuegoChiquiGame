@@ -783,3 +783,35 @@ body {
     overflow: hidden;
     position: relative;
 }
+
+@media (max-width: 768px) {
+    .ad-banner-container {
+        margin: 0.85rem auto 0.5rem auto;
+        padding: 0 6px;
+    }
+    .ad-slot-wrapper {
+        min-height: 52px;
+        height: 52px;
+        border-color: rgba(255, 255, 255, 0.12);
+    }
+    .ad-slot-wrapper iframe {
+        max-width: none !important;
+        transform: scale(calc((100vw - 28px) / 728));
+        transform-origin: center center;
+    }
+}
+
+@keyframes pulseBonus {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 8px rgba(250, 204, 21, 0.4);
+    }
+    50% {
+        transform: scale(1.04);
+        box-shadow: 0 0 16px rgba(250, 204, 21, 0.8);
+    }
+}
+
+.btn-bonus-reroll-pulse {
+    animation: pulseBonus 2s infinite ease-in-out;
+}

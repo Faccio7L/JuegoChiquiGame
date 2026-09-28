@@ -376,6 +376,8 @@
             currentDraftRound: 1,
             draftFinished: false,
             rerollsRemaining: 3,
+            bonusRerollsUsed: 0,
+            bonusRerollsUsed: 0,
             currentChoices: choices,
             currentCupRoundIndex: 0,
             cupFinished: false,
@@ -391,6 +393,8 @@
             currentDraftRound: cupState.currentDraftRound,
             draftFinished: cupState.draftFinished,
             rerollsRemaining: cupState.rerollsRemaining,
+            bonusRerollsUsed: cupState.bonusRerollsUsed || 0,
+            bonusRerollsRemaining: Math.max(0, 3 - (cupState.bonusRerollsUsed || 0)),
             effectiveTeamRating: Math.round(getEffectiveTeamRating(t)),
             choices: cupState.currentChoices,
             slots: t.slots.map(s => ({
@@ -448,6 +452,19 @@
         } else {
             cupState.currentChoices = pickFieldPlayerChoices(cupState.fpPool, cupState.idolPool, cupState.userTeam);
         }
+        return buildCupGameStateJson();
+    }
+
+    function claimBonusRerollCup() {
+        if (!cupState || cupState.draftFinished) {
+            return { error: 'El draft ya finalizó' };
+        }
+        cupState.bonusRerollsUsed = cupState.bonusRerollsUsed || 0;
+        if (cupState.bonusRerollsUsed >= 3) {
+            return { error: 'Límite de re-sorteos extra alcanzado (máximo 3)' };
+        }
+        cupState.bonusRerollsUsed++;
+        cupState.rerollsRemaining = (cupState.rerollsRemaining || 0) + 1;
         return buildCupGameStateJson();
     }
 
@@ -696,6 +713,8 @@
             currentDraftRound: leagueStateObj.currentDraftRound,
             draftFinished: leagueStateObj.draftFinished,
             rerollsRemaining: leagueStateObj.rerollsRemaining,
+            bonusRerollsUsed: leagueStateObj.bonusRerollsUsed || 0,
+            bonusRerollsRemaining: Math.max(0, 3 - (leagueStateObj.bonusRerollsUsed || 0)),
             effectiveTeamRating: Math.round(getEffectiveTeamRating(t)),
             choices: leagueStateObj.currentChoices,
             slots: t.slots.map(s => ({
@@ -781,6 +800,19 @@
         } else {
             leagueStateObj.currentChoices = pickFieldPlayerChoices(leagueStateObj.fpPool, leagueStateObj.idolPool, leagueStateObj.userTeam);
         }
+        return buildLeagueStateJson();
+    }
+
+    function claimBonusRerollLeague() {
+        if (!leagueStateObj || leagueStateObj.draftFinished) {
+            return { error: 'El draft ya finalizó' };
+        }
+        leagueStateObj.bonusRerollsUsed = leagueStateObj.bonusRerollsUsed || 0;
+        if (leagueStateObj.bonusRerollsUsed >= 3) {
+            return { error: 'Límite de re-sorteos extra alcanzado (máximo 3)' };
+        }
+        leagueStateObj.bonusRerollsUsed++;
+        leagueStateObj.rerollsRemaining = (leagueStateObj.rerollsRemaining || 0) + 1;
         return buildLeagueStateJson();
     }
 
@@ -1030,6 +1062,8 @@
             data = chooseCupPlayer(body.choiceIndex !== undefined ? body.choiceIndex : -1);
         } else if (path === '/api/draft/reroll') {
             data = rerollCupChoices();
+        } else if (path === '/api/draft/bonus-reroll') {
+            data = claimBonusRerollCup();
         } else if (path === '/api/cup/next-match') {
             data = playNextCupMatch();
         } else if (path === '/api/league/new') {
@@ -1039,6 +1073,8 @@
             data = chooseLeaguePlayer(body.choiceIndex !== undefined ? body.choiceIndex : -1);
         } else if (path === '/api/league/reroll') {
             data = rerollLeagueChoices();
+        } else if (path === '/api/league/bonus-reroll') {
+            data = claimBonusRerollLeague();
         } else if (path === '/api/league/state') {
             if (!leagueStateObj) initLeagueState(nameParam);
             data = buildLeagueStateJson();
