@@ -786,18 +786,7 @@ body {
 
 @media (max-width: 768px) {
     .ad-banner-container {
-        margin: 0.85rem auto 0.5rem auto;
-        padding: 0 6px;
-    }
-    .ad-slot-wrapper {
-        min-height: 52px;
-        height: 52px;
-        border-color: rgba(255, 255, 255, 0.12);
-    }
-    .ad-slot-wrapper iframe {
-        max-width: none !important;
-        transform: scale(calc((100vw - 28px) / 728));
-        transform-origin: center center;
+        display: none !important;
     }
 }
 
