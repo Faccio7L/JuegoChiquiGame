@@ -759,3 +759,27 @@ body {
 .mode-action-btn:hover {
     transform: translateY(-1px);
 }
+
+.ad-banner-container {
+    max-width: 900px;
+    margin: 1.5rem auto 1rem auto;
+    padding: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.ad-slot-wrapper {
+    background: #0f131a;
+    border: 1px solid #232a36;
+    border-radius: 6px;
+    min-height: 90px;
+    width: 100%;
+    max-width: 728px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
