@@ -619,6 +619,10 @@ function renderGameOverRecap(isChampion, finalRoundName) {
             <span>🛡️ Goles recibidos: <strong>${totalConceded}</strong></span>
             <span>Dif: <strong>${diffSign}</strong></span>
         </div>
+        <div class="recap-share-link bg-black bg-opacity-60 border border-warning border-opacity-50 rounded p-2 my-2 text-center">
+            <span class="text-secondary font-mono d-block text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.5px;">Link para jugar y compartir:</span>
+            <a href="https://juego-chiqui-game.vercel.app/index.html" target="_blank" class="text-warning text-decoration-none font-chakra fw-bold fs-6 d-inline-block text-truncate" style="max-width: 100%;">https://juego-chiqui-game.vercel.app/index.html</a>
+        </div>
         <div class="recap-socials">
             <span>Redes:</span>
             <a href="https://www.instagram.com/santifaccio/" target="_blank" rel="noopener noreferrer" class="social-link ig">📸 @santifaccio</a>
@@ -650,7 +654,7 @@ function shareRunSummary() {
     const totalScored = cupRunHistory.reduce((sum, m) => sum + m.homeGoals, 0);
     const totalConceded = cupRunHistory.reduce((sum, m) => sum + m.awayGoals, 0);
 
-    const shareContent = `${title}\nEquipo: ${gameState.userTeamName || 'ChiquiTeam'}\nMedia del Once Titular: ${Math.round(gameState.effectiveTeamRating)}\n\nCamino en la Copa:\n${matchesText}\n\n⚽ Goles a favor: ${totalScored} | 🛡️ Goles recibidos: ${totalConceded}\n\n🏆 Jugá en ChiquiCup\n📸 IG: https://www.instagram.com/santifaccio/\n✖️ X: https://x.com/santifaccioo`;
+    const shareContent = `${title}\nEquipo: ${gameState.userTeamName || 'ChiquiTeam'}\nMedia del Once Titular: ${Math.round(gameState.effectiveTeamRating)}\n\nCamino en la Copa:\n${matchesText}\n\n⚽ Goles a favor: ${totalScored} | 🛡️ Goles recibidos: ${totalConceded}\n\n🎮 Jugá vos también en: https://juego-chiqui-game.vercel.app/index.html\n📸 IG: https://www.instagram.com/santifaccio/\n✖️ X: https://x.com/santifaccioo`;
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(shareContent);

@@ -1109,6 +1109,10 @@ function renderGameOverRecap() {
             <span class="text-secondary d-block mb-1 text-uppercase" style="font-size: 0.72rem;">Camino en el Torneo:</span>
             ${rowsHtml}
         </div>
+        <div class="recap-share-link bg-black bg-opacity-60 border border-info border-opacity-50 rounded p-2 my-2 text-center">
+            <span class="text-secondary font-mono d-block text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.5px;">Link para jugar y compartir:</span>
+            <a href="https://juego-chiqui-game.vercel.app/index.html" target="_blank" class="text-info text-decoration-none font-chakra fw-bold fs-6 d-inline-block text-truncate" style="max-width: 100%;">https://juego-chiqui-game.vercel.app/index.html</a>
+        </div>
         <div class="recap-socials">
             <span>Redes:</span>
             <a href="https://www.instagram.com/santifaccio/" target="_blank" rel="noopener noreferrer" class="social-link ig text-info text-decoration-none">📸 @santifaccio</a>
@@ -1164,7 +1168,7 @@ function shareRunSummary() {
         matchesText = `Fase Regular completada (${pts} pts | ${won}G-${drawn}E-${lost}P)`;
     }
 
-    const shareContent = `${title}\nEquipo: ${myTeam} (Media Once: ${Math.round(leagueState.effectiveTeamRating)})\n\nFase Regular (Zona A):\n⭐ Puntos: ${pts} | Récord: ${won}G - ${drawn}E - ${lost}P\n⚽ Goles convertidos: ${gf} | 🛡️ Goles recibidos: ${gc} (Dif: ${diffSign})\n\nDesempeño en Playoffs:\n${matchesText}\n\n🏆 Jugá en ChiquiLeague\n📸 IG: https://www.instagram.com/santifaccio/\n✖️ X: https://x.com/santifaccioo`;
+    const shareContent = `${title}\nEquipo: ${myTeam} (Media Once: ${Math.round(leagueState.effectiveTeamRating)})\n\nFase Regular (Zona A):\n⭐ Puntos: ${pts} | Récord: ${won}G - ${drawn}E - ${lost}P\n⚽ Goles convertidos: ${gf} | 🛡️ Goles recibidos: ${gc} (Dif: ${diffSign})\n\nDesempeño en Playoffs:\n${matchesText}\n\n🎮 Jugá vos también en: https://juego-chiqui-game.vercel.app/index.html\n📸 IG: https://www.instagram.com/santifaccio/\n✖️ X: https://x.com/santifaccioo`;
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(shareContent);
