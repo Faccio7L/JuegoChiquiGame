@@ -232,7 +232,7 @@
     }
 
     function calculateGoalProbability(homeRating, awayRating) {
-        return 1.0 / (1.0 + Math.exp(-0.048 * (homeRating - awayRating)));
+        return 1.0 / (1.0 + Math.exp(-0.085 * (homeRating - awayRating)));
     }
 
     function simulateMatch(homeRating, awayRating, homeName, awayName, homeScorers, awayScorers, homeIsUser, userTeam, isKnockout) {
