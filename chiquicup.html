@@ -14,6 +14,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700&family=Bebas+Neue&family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Google AdSense: Descomentar y colocar tu client ID cuando tengas la cuenta aprobada -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 </head>
 <body class="bg-black text-light min-vh-100 d-flex flex-column">
 
@@ -315,12 +318,25 @@
 
             </section>
         </div>
+
+        <!-- ESPACIO PUBLICITARIO / GOOGLE ADSENSE -->
+        <div class="ad-banner-container max-w-1000 mx-auto w-100 mt-3 text-center">
+            <div class="ad-slot-wrapper bg-black bg-opacity-40 border border-secondary border-opacity-30 rounded p-2 text-center" style="min-height: 70px; display: flex; align-items: center; justify-content: center;">
+                <!-- Pegar aquí el bloque de anuncio de Google AdSense (<ins class="adsbygoogle" ...></ins>) -->
+                <span class="text-secondary font-mono small opacity-50" style="font-size: 0.7rem; letter-spacing: 1px;">ESPACIO PUBLICITARIO</span>
+            </div>
+        </div>
     </main>
 
-    
     <footer class="retro-footer bg-black border-top border-secondary-subtle py-2 px-3 mt-auto">
         <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap gap-2 font-mono small text-secondary">
-            <span>CHIQUI CUP &bull; FÚTBOL ARGENTINO &bull; TORNEO DE 32 CLUBES</span>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span>CHIQUI CUP &bull; FÚTBOL ARGENTINO</span>
+                <span>&bull;</span>
+                <a href="privacy.html" class="text-secondary text-decoration-none hover-light">Privacidad</a>
+                <span>&bull;</span>
+                <a href="terms.html" class="text-secondary text-decoration-none hover-light">Términos</a>
+            </div>
             <div class="footer-socials d-flex align-items-center gap-2">
                 <a href="https://www.instagram.com/santifaccio/" target="_blank" rel="noopener noreferrer" class="text-secondary text-decoration-none hover-light">📸 Instagram</a>
                 <span>&bull;</span>
