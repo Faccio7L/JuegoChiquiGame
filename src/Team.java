@@ -3,12 +3,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Plantel del usuario: 11 slots según {@link Formation}. Cuando se toma un
- * jugador en el draft, se asigna automáticamente al mejor slot vacío
- * disponible (match exacto de posición > misma categoría > cualquier otro),
- * ya que el juego no tiene banco de suplentes (sección 1.7 del documento).
- */
+
 public class Team {
 
     private String name = "ChiquiTeam";
@@ -54,15 +49,7 @@ public class Team {
                 .anyMatch(s -> s.getRequiredPosition().getCategory() == category);
     }
 
-    /**
-     * Asigna el jugador al mejor slot vacío disponible.
-     * 1) Slot vacío con la posición específica exacta.
-     * 2) Slot vacío de la misma categoría general.
-     * 3) Cualquier slot vacío restante.
-     *
-     * @return el slot al que fue asignado, o null si no hay slots vacíos
-     *         (el plantel ya está completo).
-     */
+    
     public TeamSlot assignPlayer(Player player) {
         TeamSlot exact = findEmptySlot(s -> s.getRequiredPosition() == player.getNativePosition());
         if (exact != null) {
@@ -90,11 +77,7 @@ public class Team {
                 .orElse(null);
     }
 
-    /**
-     * Cuenta cuántos slots vacíos quedan por categoría general. Usado por
-     * el motor de draft para aplicar el leve sesgo de probabilidad hacia
-     * posiciones faltantes (sección 1.6).
-     */
+    
     public Map<PositionCategory, Long> countEmptySlotsByCategory() {
         Map<PositionCategory, Long> result = new EnumMap<>(PositionCategory.class);
         for (PositionCategory cat : PositionCategory.values()) {
@@ -107,11 +90,7 @@ public class Team {
         return result;
     }
 
-    /**
-     * Media efectiva promedio del equipo (promedio de la media efectiva de
-     * cada slot ocupado, ya con penalizaciones aplicadas). Es la base para
-     * la simulación de partidos.
-     */
+    
     public double getEffectiveRating() {
         List<TeamSlot> filled = new ArrayList<>();
         for (TeamSlot s : slots) {

@@ -1,6 +1,4 @@
-/**
- * El resultado de una ronda: contra qué club jugó el usuario y cómo salió.
- */
+
 public class CupRoundOutcome {
 
     private final CupRound round;

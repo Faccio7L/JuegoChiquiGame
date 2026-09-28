@@ -1,25 +1,7 @@
-/**
- * SCRIPT EXCLUSIVO DE CHIQUILEAGUE
- *
- * Maneja el ciclo completo de ChiquiLeague:
- * 1. Draft de 11 jugadores: Selección tocando cualquier parte de la tarjeta o su botón.
- * 2. Nombre del equipo personalizado (por defecto "ChiquiTeam").
- * 3. Visualización clara de medias en cancha, tablas, cruces y cuadro de playoffs al igual que en ChiquiCup.
- * 4. Fase Regular de 15 Fechas:
- *    - Simulación del partido propio EN TIEMPO REAL (1' a 90' con cronómetro y relato).
- *    - 14 partidos simulados en segundo plano.
- *    - Tablas de posiciones de Zona A y Zona B siempre accesibles con medias visibles.
- * 5. Playoffs de Eliminación Directa:
- *    - Octavos -> Cuartos -> Semifinales -> Gran Final.
- *    - Consagración de Campeón estrictamente al ganar la Gran Final.
- *    - Control de velocidad 1x y 2x (oculto automáticamente al finalizar el certamen).
- * 6. Resumen de Campaña Final con el formato idéntico a ChiquiCup:
- *    - Puntos, Récord G-E-P, Goles GF/GC, cruces con ✅/❌.
- *    - Copiable al portapapeles con toast, enlaces a Instagram (@santifaccio) y X (@santifaccioo).
- */
+
 
 let leagueState = null;
-let simulationSpeedMultiplier = 1; // 1x o 2x
+let simulationSpeedMultiplier = 1; 
 let isSimulating = false;
 let isPicking = false;
 
@@ -68,7 +50,7 @@ function setupEventListeners() {
         playPlayoffBtn.addEventListener('click', playNextPlayoffRealTime);
     }
 
-    // Botones del panel de fin de partida (Idéntico a ChiquiCup)
+    
     const shareBtn = document.getElementById('btn-share-run');
     if (shareBtn) {
         shareBtn.addEventListener('click', shareRunSummary);
@@ -79,7 +61,7 @@ function setupEventListeners() {
         playAgainBtn.addEventListener('click', startNewLeague);
     }
 
-    // Botones de velocidad (1x Normal y 2x Rápido)
+    
     setupSpeedToggle('btn-speed-toggle');
     setupSpeedToggle('btn-speed-toggle-playoff');
 }
@@ -106,7 +88,7 @@ function setupSpeedToggle(btnId) {
             btn.classList.remove('active');
         }
 
-        // Sincronizar visualmente ambos botones
+        
         const b1 = document.getElementById('btn-speed-toggle');
         const b2 = document.getElementById('btn-speed-toggle-playoff');
         if (b1) {
@@ -147,7 +129,7 @@ async function loadLeagueState() {
         const res = await fetch('/api/league/state');
         if (res.ok) {
             leagueState = await res.json();
-            // Si el estado en el backend no tiene asignado el nombre elegido, reiniciamos con el nombre
+            
             if (leagueState.userTeamName && leagueState.userTeamName !== teamName) {
                 await startNewLeague();
                 return;
@@ -179,8 +161,86 @@ async function startNewLeague() {
 
             const gameOverPanel = document.getElementById('game-over-panel');
             if (gameOverPanel) gameOverPanel.classList.add('d-none');
+            const recapContent = document.getElementById('run-recap-content');
+            if (recapContent) recapContent.innerHTML = '';
             const toast = document.getElementById('share-toast');
             if (toast) toast.classList.add('d-none');
+
+            const liveBoard = document.getElementById('match-live-board');
+            if (liveBoard) liveBoard.classList.add('d-none');
+            const playoffLiveBoard = document.getElementById('playoff-live-board');
+            if (playoffLiveBoard) playoffLiveBoard.classList.add('d-none');
+
+            const penaltiesDisplay = document.getElementById('playoff-penalties-display');
+            if (penaltiesDisplay) penaltiesDisplay.classList.add('d-none');
+            const penHomeDots = document.getElementById('playoff-pen-home-dots');
+            if (penHomeDots) penHomeDots.innerHTML = '';
+            const penAwayDots = document.getElementById('playoff-pen-away-dots');
+            if (penAwayDots) penAwayDots.innerHTML = '';
+            const penScoreText = document.getElementById('playoff-penalties-score-text');
+            if (penScoreText) penScoreText.textContent = '0 - 0';
+            const penStatusLine = document.getElementById('playoff-pen-status-line');
+            if (penStatusLine) penStatusLine.textContent = 'Preparando la serie...';
+
+            const resultBanner = document.getElementById('match-result-banner');
+            if (resultBanner) {
+                resultBanner.classList.add('d-none');
+                resultBanner.className = 'alert alert-dark border-secondary text-center py-2 mb-0 d-none';
+            }
+            const resultText = document.getElementById('match-result-text');
+            if (resultText) resultText.textContent = '';
+
+            const playoffResultBanner = document.getElementById('playoff-result-banner');
+            if (playoffResultBanner) {
+                playoffResultBanner.classList.add('d-none');
+                playoffResultBanner.className = 'alert alert-dark border-secondary text-center py-2 mb-0 d-none';
+            }
+            const playoffResultText = document.getElementById('playoff-result-text');
+            if (playoffResultText) playoffResultText.textContent = '';
+
+            const userStatusCard = document.getElementById('playoff-user-status-card');
+            if (userStatusCard) userStatusCard.classList.add('d-none');
+
+            const eventsLog = document.getElementById('events-log');
+            if (eventsLog) eventsLog.innerHTML = '';
+            const playoffEventsLog = document.getElementById('playoff-events-log');
+            if (playoffEventsLog) playoffEventsLog.innerHTML = '';
+
+            const fechaMatches = document.getElementById('fecha-matches-container');
+            if (fechaMatches) fechaMatches.innerHTML = '';
+            const bracketContainer = document.getElementById('playoff-bracket-container');
+            if (bracketContainer) bracketContainer.innerHTML = '';
+
+            const liveHomeScore = document.getElementById('live-home-score');
+            if (liveHomeScore) liveHomeScore.textContent = '0';
+            const liveAwayScore = document.getElementById('live-away-score');
+            if (liveAwayScore) liveAwayScore.textContent = '0';
+            const liveMatchTime = document.getElementById('live-match-time');
+            if (liveMatchTime) liveMatchTime.textContent = "0'";
+
+            const playoffHomeScore = document.getElementById('playoff-live-home-score');
+            if (playoffHomeScore) playoffHomeScore.textContent = '0';
+            const playoffAwayScore = document.getElementById('playoff-live-away-score');
+            if (playoffAwayScore) playoffAwayScore.textContent = '0';
+            const playoffMatchTime = document.getElementById('playoff-live-match-time');
+            if (playoffMatchTime) playoffMatchTime.textContent = "0'";
+
+            const playFechaBtn = document.getElementById('btn-play-fecha');
+            if (playFechaBtn) playFechaBtn.disabled = false;
+            const playPlayoffBtn = document.getElementById('btn-play-playoff');
+            if (playPlayoffBtn) playPlayoffBtn.disabled = false;
+
+            simulationSpeedMultiplier = 1;
+            const speedBtn1 = document.getElementById('btn-speed-toggle');
+            if (speedBtn1) {
+                speedBtn1.textContent = '1x Normal';
+                speedBtn1.classList.remove('active');
+            }
+            const speedBtn2 = document.getElementById('btn-speed-toggle-playoff');
+            if (speedBtn2) {
+                speedBtn2.textContent = '1x Normal';
+                speedBtn2.classList.remove('active');
+            }
 
             const bracketNavBtn = document.getElementById('nav-bracket-btn');
             if (bracketNavBtn) {
@@ -674,7 +734,7 @@ function renderPlayoffs() {
     const roundName = leagueState.league.currentPlayoffRoundName || (leagueState.league.userWonLeague ? 'Finalizado' : 'Playoffs');
     if (stageTitle) stageTitle.textContent = `PLAYOFFS: ${roundName.toUpperCase()}`;
 
-    // Estado del usuario en playoffs: sólo mostrar mensaje si NO clasificó
+    
     if (userStatusCard) {
         if (leagueState.league.regularSeasonFinished && !leagueState.league.userQualifiedForPlayoffs) {
             userStatusCard.classList.remove('d-none');
@@ -849,9 +909,9 @@ async function playNextPlayoffRealTime() {
             await sleep(getTickDelay());
         }
 
-        // Tanda de Penales
+        
         if (userMatch.wentToPenalties && userMatch.penaltyEvents && userMatch.penaltyEvents.length > 0) {
-            await sleep(getTickDelay() * 3);
+            await sleep(getTickDelay() * 6);
             if (penaltiesDisplay) penaltiesDisplay.classList.remove('d-none');
             if (penHomeName) penHomeName.textContent = hDisplayName;
             if (penAwayName) penAwayName.textContent = aDisplayName;
@@ -859,36 +919,79 @@ async function playNextPlayoffRealTime() {
             if (penAwayDots) penAwayDots.innerHTML = '';
             if (penScoreText) penScoreText.textContent = '0 - 0';
 
-            const penHeaderItem = document.createElement('div');
-            penHeaderItem.className = 'ticker-item info font-mono small text-warning';
-            penHeaderItem.innerHTML = `<strong>Minuto 120': Empate ${userMatch.homeGoals}-${userMatch.awayGoals}. ¡Penales!</strong>`;
-            if (eventsLog) eventsLog.prepend(penHeaderItem);
+            const penStatusLine = document.getElementById('playoff-pen-status-line');
+            if (penStatusLine) penStatusLine.textContent = "Empate en los 120'. ¡Comienza la tanda de penales!";
 
-            for (const pe of userMatch.penaltyEvents) {
-                await sleep(getTickDelay() * 3);
-                const dot = document.createElement('span');
-                dot.className = pe.scored ? 'pen-dot goal' : 'pen-dot miss';
+            const tandaAlert = document.createElement('div');
+            tandaAlert.className = 'ticker-item info font-mono small text-warning';
+            tandaAlert.innerHTML = `<strong>🚨 ¡DEFINICIÓN POR PENALES! Empate en los 120' (${userMatch.homeGoals}-${userMatch.awayGoals})</strong>`;
+            if (eventsLog) eventsLog.prepend(tandaAlert);
 
-                if (pe.isHome) {
-                    if (penHomeDots) penHomeDots.appendChild(dot);
-                } else {
-                    if (penAwayDots) penAwayDots.appendChild(dot);
-                }
+            for (let i = 0; i < 5; i++) {
+                const dotH = document.createElement('span');
+                dotH.className = 'pen-dot';
+                dotH.id = `playoff-pen-dot-h-${i + 1}`;
+                if (penHomeDots) penHomeDots.appendChild(dotH);
 
-                if (penScoreText) {
-                    penScoreText.textContent = `${pe.homeScore} - ${pe.awayScore}`;
-                }
-
-                const peItem = document.createElement('div');
-                const kickerTeam = pe.isHome ? hDisplayName : aDisplayName;
-                const isUserKicker = isUserTeam(pe.isHome ? userMatch.homeTeam : userMatch.awayTeam);
-                peItem.className = pe.scored ? (isUserKicker ? 'ticker-item goal-home font-mono small text-warning fw-bold' : 'ticker-item goal-away font-mono small text-light') : 'ticker-item font-mono small text-secondary';
-                peItem.innerHTML = `Penal ${pe.round}: ${pe.kicker} (${kickerTeam}) ➔ ${pe.scored ? '¡GOL! ⚽' : '❌ ATAJADO / ERRADO'}`;
-                if (eventsLog) eventsLog.prepend(peItem);
+                const dotA = document.createElement('span');
+                dotA.className = 'pen-dot';
+                dotA.id = `playoff-pen-dot-a-${i + 1}`;
+                if (penAwayDots) penAwayDots.appendChild(dotA);
             }
+
+            await sleep(getTickDelay() * 6);
+
+            for (let i = 0; i < userMatch.penaltyEvents.length; i++) {
+                const k = userMatch.penaltyEvents[i];
+                const teamName = k.isHome ? hDisplayName : aDisplayName;
+
+                if (penStatusLine) penStatusLine.textContent = `${teamName}: patea ${k.kicker}...`;
+                await sleep(getTickDelay() * 5);
+
+                if (k.round > 5) {
+                    const container = k.isHome ? penHomeDots : penAwayDots;
+                    const existing = document.getElementById(`playoff-pen-dot-${k.isHome ? 'h' : 'a'}-${k.round}`);
+                    if (!existing && container) {
+                        const newDot = document.createElement('span');
+                        newDot.className = 'pen-dot';
+                        newDot.id = `playoff-pen-dot-${k.isHome ? 'h' : 'a'}-${k.round}`;
+                        container.appendChild(newDot);
+                    }
+                }
+
+                const dot = document.getElementById(`playoff-pen-dot-${k.isHome ? 'h' : 'a'}-${k.round}`);
+                const logItem = document.createElement('div');
+
+                if (k.scored) {
+                    if (dot) dot.classList.add('scored');
+                    if (penStatusLine) penStatusLine.textContent = `¡GOL! ${k.kicker} convirtió (${k.homeScore}-${k.awayScore})`;
+                    logItem.className = k.isHome ? 'ticker-item goal-home font-mono small text-warning fw-bold' : 'ticker-item goal-away font-mono small text-light';
+                    logItem.innerHTML = `<strong>⚽ Penal de ${k.kicker} (${teamName}): ¡GOL! (${k.homeScore}-${k.awayScore})</strong>`;
+                } else {
+                    if (dot) dot.classList.add('missed');
+                    if (penStatusLine) penStatusLine.textContent = `¡FALLÓ! ${k.kicker} no pudo convertir (${k.homeScore}-${k.awayScore})`;
+                    logItem.className = 'ticker-item info font-mono small text-secondary';
+                    logItem.innerHTML = `<strong>❌ Penal de ${k.kicker} (${teamName}): ¡FALLADO! (${k.homeScore}-${k.awayScore})</strong>`;
+                }
+
+                if (penScoreText) penScoreText.textContent = `${k.homeScore} - ${k.awayScore}`;
+                if (eventsLog) eventsLog.prepend(logItem);
+
+                await sleep(getTickDelay() * 4);
+            }
+
+            const winnerDisplayName = isUserTeam(userMatch.winner) ? getTeamName() : userMatch.winner;
+            if (penStatusLine) penStatusLine.textContent = `¡Tanda finalizada! Ganó ${winnerDisplayName} (${userMatch.homePenalties} - ${userMatch.awayPenalties})`;
+
+            const finItem = document.createElement('div');
+            finItem.className = 'ticker-item info font-mono small text-warning';
+            finItem.innerHTML = `<strong>🏁 ¡Ganó ${winnerDisplayName} por penales (${userMatch.homePenalties}-${userMatch.awayPenalties})!</strong>`;
+            if (eventsLog) eventsLog.prepend(finItem);
+
+            await sleep(getTickDelay() * 6);
         }
 
-        // REGLA CRÍTICA: Solo se sale Campeón al ganar la Gran Final (o si userWonLeague es true en el backend)
+        
         if (resultBanner && resultText) {
             resultBanner.classList.remove('d-none');
             const userWon = isUserTeam(userMatch.winner);

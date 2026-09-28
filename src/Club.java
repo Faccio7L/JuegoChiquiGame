@@ -1,12 +1,6 @@
 import java.util.Objects;
 
-/**
- * Club rival de la copa. Incluye:
- * - name: Nombre del club.
- * - weight: Peso/jerarquía dentro de su categoría para el sorteo interno.
- * - baseMedia: Media oficial visible para el usuario.
- * - tier: Categoría oculta para el sorteo por bombos (BUENO, INTERMEDIO, MALO).
- */
+
 public class Club {
 
     private final String name;

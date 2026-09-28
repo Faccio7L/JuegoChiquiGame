@@ -1,12 +1,4 @@
-/**
- * CLASE EXCLUSIVA DE CHIQUILEAGUE (NO UTILIZADA EN CHIQUICUP)
- *
- * Rondas eliminatorias de los Playoffs de la ChiquiLeague:
- * - OCTAVOS (16 equipos, boost rival = 0)
- * - CUARTOS (8 equipos, boost rival = 2)
- * - SEMIFINAL (4 equipos, boost rival = 4)
- * - FINAL (2 equipos, boost rival = 6)
- */
+
 public enum LeaguePlayoffRound {
     OCTAVOS("Octavos de Final", 0.0),
     CUARTOS("Cuartos de Final", 2.0),

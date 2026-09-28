@@ -1,10 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * El camino completo del usuario en la copa: lista de rondas jugadas
- * (en orden) hasta que fue eliminado o se consagró campeón.
- */
+
 public class CupRunResult {
 
     private final List<CupRoundOutcome> roundOutcomes = new ArrayList<>();

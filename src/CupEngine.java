@@ -5,18 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Motor de la copa de 32 equipos. Reglas implementadas (sección 2 y 3 del
- * documento de requisitos):
- * - El usuario NO ve el resto del cuadro, solo su propio camino (estilo "7-0"),
- *   por lo que este motor solo simula los partidos del usuario, ronda por ronda.
- * - En cada ronda se sortea un rival con probabilidad ponderada por el
- *   "weight" (peso/jerarquía) de cada club, sesgo que se inclina
- *   progresivamente hacia clubes grandes a medida que se avanza de ronda.
- * - El rival recibe un boost oculto de media que aumenta con cada ronda
- *   superada (invisible para el usuario).
- * - Un club ya enfrentado en este recorrido no puede volver a salir sorteado.
- */
+
 public class CupEngine {
 
     private final List<Club> clubPool;
@@ -32,10 +21,7 @@ public class CupEngine {
         this.random = random;
     }
 
-    /**
-     * Juega el camino completo del usuario en la copa: 5 rondas, deteniéndose
-     * apenas el usuario pierde (o hasta ser campeón).
-     */
+    
     public CupRunResult playUserRun(Team userTeam) {
         CupRunResult result = new CupRunResult();
         List<Club> faced = new ArrayList<>();
@@ -60,18 +46,7 @@ public class CupEngine {
         return result;
     }
 
-    /**
-     * Sorteo por bombos discretos según la ronda:
-     * - Buenos, Intermedios y Malos.
-     * Probabilidades exactas por ronda:
-     * 16vos: 0% Buenos, 30% Intermedios, 70% Malos
-     * 8vos:  5% Buenos, 50% Intermedios, 45% Malos
-     * 4tos:  25% Buenos, 50% Intermedios, 25% Malos
-     * Semis: 50% Buenos, 35% Intermedios, 15% Malos
-     * Final: 65% Buenos, 25% Intermedios, 10% Malos
-     *
-     * Dentro del bombo seleccionado, se elige el club ponderado por su jerarquía/weight.
-     */
+    
     public Club drawOpponent(CupRound round, List<Club> alreadyFaced) {
         List<Club> available = new ArrayList<>(clubPool);
         available.removeAll(alreadyFaced);

@@ -10,30 +10,27 @@ import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-/**
- * Servidor HTTP nativo de Java para la aplicación Fulbo.
- * Sirve archivos estáticos (HTML/CSS/JS) y expone la API REST para el juego.
- */
+
 public class FulboServer {
 
     private final int port;
     private final File webDir;
     private HttpServer server;
 
-    // Estado del juego en memoria
+    
     private final Random random = new Random();
     private LeagueEngine leagueEngine;
     private Team userTeam;
     private DraftEngine draftEngine;
     private List<Player> currentChoices = new ArrayList<>();
-    private int currentDraftRound = 1; // 1 a 11
+    private int currentDraftRound = 1; 
     private boolean draftFinished = false;
-    private int rerollsRemaining = 3; // 3 chances de resortear las 4 opciones durante el draft
+    private int rerollsRemaining = 3; 
 
     private List<Club> clubPool;
     private List<Player> allPlayersMasterList = new ArrayList<>();
     private List<Club> facedClubs = new ArrayList<>();
-    private int currentCupRoundIndex = 0; // 0: 16avos, 1: 8vos, 2: 4tos, 3: semi, 4: final
+    private int currentCupRoundIndex = 0; 
     private boolean cupFinished = false;
     private boolean userWonCup = false;
 
@@ -47,7 +44,7 @@ public class FulboServer {
     public void start() throws IOException {
         server = HttpServer.create(new InetSocketAddress(port), 0);
 
-        // Rutas de API
+        
         server.createContext("/api/game/new", exchange -> {
             if ("POST".equalsIgnoreCase(exchange.getRequestMethod()) || "GET".equalsIgnoreCase(exchange.getRequestMethod())) {
                 String teamName = parseTeamName(exchange);
@@ -110,7 +107,7 @@ public class FulboServer {
             }
         });
 
-                // --- RUTAS DE API EXCLUSIVAS DE CHIQUILEAGUE ---
+        
         server.createContext("/api/league/new", exchange -> {
             if ("POST".equalsIgnoreCase(exchange.getRequestMethod()) || "GET".equalsIgnoreCase(exchange.getRequestMethod())) {
                 String teamName = parseTeamName(exchange);
@@ -237,10 +234,10 @@ public class FulboServer {
                 facedClubs.add(opponent);
 
                 double userRating = userTeam.getEffectiveRating();
-                // Regla 3: Boost oculto en rival según ronda superada
+                
                 double opponentEffectiveRating = opponent.getBaseMedia() + round.getCumulativeHiddenBoost();
 
-                // Simular partido con asignación de autores reales de gol
+                
                 MatchResult matchResult = simulateMatchWithRealPlayers(userRating, opponentEffectiveRating, opponent);
 
                 boolean userWon = matchResult.isHomeWon();
@@ -265,7 +262,7 @@ public class FulboServer {
             }
         });
 
-        // Servir archivos estáticos del frontend
+        
         server.createContext("/", new StaticFileHandler(webDir));
 
         server.setExecutor(null);
@@ -285,7 +282,7 @@ public class FulboServer {
         List<Player> allGks = DataLoader.createGoalkeeperPool();
         List<Player> allFps = DataLoader.createFieldPlayerPool();
 
-        // En ChiquiLeague: Ferro, Colón y Aldosivi están OUT (en lugar de Aldosivi entra "Tu Equipo")
+        
         List<Player> gks = new ArrayList<>();
         for (Player p : allGks) {
             if (!isExcludedLeagueClub(p.getClub())) {
@@ -315,25 +312,22 @@ public class FulboServer {
 
     private static boolean isExcludedLeagueClub(String club) {
         return "Ferro Carril Oeste".equalsIgnoreCase(club) ||
-               "Colón de Santa Fe".equalsIgnoreCase(club) ||
-               "Aldosivi".equalsIgnoreCase(club);
+                "Colón de Santa Fe".equalsIgnoreCase(club) ||
+                "Aldosivi".equalsIgnoreCase(club);
     }
 
-    /**
-     * Construye el estado JSON completo para el modo ChiquiLeague:
-     * Draft, Tablas de Zona A y B (30 equipos), Fixture de 15 fechas, Resultados y Playoffs.
-     */
+    
     private String buildLeagueStateJson() {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         sb.append("\"mode\":\"LEAGUE\",");
-        sb.append("\"userTeamName\":\"").append(escapeJson(userTeam != null ? userTeam.getName() : "ChiquiTeam")).append("\",");
+        sb.append("\"userTeamName\":").append(escapeJson(userTeam != null ? userTeam.getName() : "ChiquiTeam")).append(",");
         sb.append("\"currentDraftRound\":").append(currentDraftRound).append(",");
         sb.append("\"draftFinished\":").append(draftFinished).append(",");
         sb.append("\"rerollsRemaining\":").append(rerollsRemaining).append(",");
         sb.append("\"effectiveTeamRating\":").append((int) Math.round(userTeam.getEffectiveRating())).append(",");
 
-        // Choices
+        
         sb.append("\"choices\":[");
         for (int i = 0; i < currentChoices.size(); i++) {
             Player p = currentChoices.get(i);
@@ -353,7 +347,7 @@ public class FulboServer {
         }
         sb.append("],");
 
-        // Team Slots
+        
         sb.append("\"slots\":[");
         List<TeamSlot> slots = userTeam.getSlots();
         for (int i = 0; i < slots.size(); i++) {
@@ -384,7 +378,7 @@ public class FulboServer {
         }
         sb.append("],");
 
-        // League State
+        
         sb.append("\"league\":{");
         sb.append("\"currentMatchdayIndex\":").append(leagueEngine.getCurrentMatchdayIndex()).append(",");
         sb.append("\"currentMatchdayNumber\":").append(leagueEngine.getCurrentMatchdayNumber()).append(",");
@@ -396,7 +390,7 @@ public class FulboServer {
         sb.append("\"currentPlayoffRoundName\":").append(leagueEngine.getCurrentPlayoffRound() != null ? "\"" + leagueEngine.getCurrentPlayoffRound().getDisplayName() + "\"" : "null").append(",");
         sb.append("\"currentPlayoffRoundBoost\":").append(leagueEngine.getCurrentPlayoffRound() != null ? (int) leagueEngine.getCurrentPlayoffRound().getRivalHiddenBoost() : 0).append(",");
 
-        // Next User Match
+        
         LeagueMatch userMatch = leagueEngine.getCurrentUserMatch();
         if (userMatch != null) {
             sb.append("\"currentUserMatch\":{");
@@ -410,7 +404,7 @@ public class FulboServer {
             sb.append("\"currentUserMatch\":null,");
         }
 
-        // Standings Zona A
+        
         sb.append("\"standingsA\":[");
         List<LeagueTeamStanding> stdA = leagueEngine.getSortedStandingsA();
         for (int i = 0; i < stdA.size(); i++) {
@@ -433,7 +427,7 @@ public class FulboServer {
         }
         sb.append("],");
 
-        // Standings Zona B
+        
         sb.append("\"standingsB\":[");
         List<LeagueTeamStanding> stdB = leagueEngine.getSortedStandingsB();
         for (int i = 0; i < stdB.size(); i++) {
@@ -456,7 +450,7 @@ public class FulboServer {
         }
         sb.append("],");
 
-        // Partidos de la última fecha jugada (o actual)
+        
         sb.append("\"lastPlayedMatches\":[");
         int lastIdx = Math.max(0, leagueEngine.getCurrentMatchdayIndex() - 1);
         if (lastIdx < leagueEngine.getFixture().size()) {
@@ -490,7 +484,7 @@ public class FulboServer {
         }
         sb.append("],");
 
-        // Partidos de la última ronda de Playoffs jugada (para simulación en tiempo real)
+        
         sb.append("\"lastPlayedPlayoffMatches\":[");
         List<LeaguePlayoffMatch> lastPMatches = leagueEngine.getLastPlayedPlayoffMatches();
         for (int i = 0; i < lastPMatches.size(); i++) {
@@ -499,7 +493,7 @@ public class FulboServer {
         }
         sb.append("],");
 
-        // Historial completo de rondas de Playoffs
+        
         sb.append("\"allPlayoffHistory\":[");
         List<List<LeaguePlayoffMatch>> allHistory = leagueEngine.getAllPlayoffRoundsHistory();
         for (int h = 0; h < allHistory.size(); h++) {
@@ -514,7 +508,7 @@ public class FulboServer {
         }
         sb.append("],");
 
-        // Partidos de Playoffs actuales
+        
         sb.append("\"playoffMatches\":[");
         List<LeaguePlayoffMatch> pMatches = leagueEngine.getCurrentPlayoffMatches();
         for (int i = 0; i < pMatches.size(); i++) {
@@ -523,7 +517,7 @@ public class FulboServer {
         }
         sb.append("],");
 
-        // Resumen del torneo para Tu Equipo
+        
         sb.append("\"tournamentSummary\":{");
         LeagueTeamStanding userStd = leagueEngine.getUserStanding();
         if (userStd != null) {
@@ -540,7 +534,7 @@ public class FulboServer {
         }
         sb.append("\"playoffSummary\":").append(escapeJson(leagueEngine.getPlayoffStageSummary())).append(",");
 
-        // Partidos de playoffs de Tu Equipo
+        
         sb.append("\"userPlayoffMatches\":[");
         List<LeaguePlayoffMatch> userPList = leagueEngine.getUserPlayoffMatches();
         for (int i = 0; i < userPList.size(); i++) {
@@ -550,7 +544,7 @@ public class FulboServer {
         sb.append("]");
         sb.append("}");
 
-        sb.append("}"); // fin league
+        sb.append("}"); 
         sb.append("}");
         return sb.toString();
     }
@@ -573,7 +567,7 @@ public class FulboServer {
             sb.append("\"wentToPenalties\":").append(mr.wentToPenalties()).append(",");
             sb.append("\"homePenalties\":").append(mr.getHomePenalties() != null ? mr.getHomePenalties() : 0).append(",");
             sb.append("\"awayPenalties\":").append(mr.getAwayPenalties() != null ? mr.getAwayPenalties() : 0).append(",");
-            
+
             sb.append("\"events\":[");
             List<GoalEvent> gevts = mr.getEvents();
             for (int j = 0; j < gevts.size(); j++) {
@@ -608,7 +602,7 @@ public class FulboServer {
         sb.append("}");
     }
 
-        public void stop() {
+    public void stop() {
         if (server != null) {
             server.stop(0);
         }
@@ -637,26 +631,23 @@ public class FulboServer {
         cupFinished = false;
         userWonCup = false;
 
-        // Ronda 1: 4 arqueros
+        
         currentChoices = draftEngine.nextGoalkeeperChoices();
     }
 
-    /**
-     * Simula el partido aplicando la probabilidad exacta de 2.5% por minuto,
-     * pero asociando cada gol a un jugador real (del once del usuario o del club rival).
-     */
+    
     private MatchResult simulateMatchWithRealPlayers(double homeRating, double awayRating, Club rivalClub) {
         MatchResult result = new MatchResult();
         List<Player> rivalPlayers = getPlayersForClub(rivalClub.getName());
         List<Player> userAttackers = getUserOffensivePlayers();
 
-        // 90 minutos reglamentarios
+        
         simulateMinutesWithPlayers(result, 1, MatchSimulator.REGULATION_MINUTES, homeRating, awayRating, userAttackers, rivalPlayers, rivalClub.getName());
 
         boolean tiedAt90 = result.getHomeGoalsAt(MatchSimulator.REGULATION_MINUTES) == result.getAwayGoalsAt(MatchSimulator.REGULATION_MINUTES);
         if (tiedAt90) {
             result.markExtraTime();
-            // Alargue hasta el 120
+            
             simulateMinutesWithPlayers(result, MatchSimulator.REGULATION_MINUTES + 1, MatchSimulator.EXTRA_TIME_MINUTES, homeRating, awayRating, userAttackers, rivalPlayers, rivalClub.getName());
         }
 
@@ -673,7 +664,7 @@ public class FulboServer {
     }
 
     private void simulateMinutesWithPlayers(MatchResult result, int fromMinute, int toMinute, double homeRating, double awayRating,
-                                           List<Player> userAttackers, List<Player> rivalPlayers, String rivalClubName) {
+                                            List<Player> userAttackers, List<Player> rivalPlayers, String rivalClubName) {
         double pHomeGivenGoal = MatchSimulator.calculateGoalProbability(homeRating, awayRating);
 
         for (int m = fromMinute; m <= toMinute; m++) {
@@ -759,15 +750,15 @@ public class FulboServer {
         switch (cat) {
             case DELANTERO:
                 if (pos == Position.DC) return 1;
-                return 2; // ED, EL, EI
+                return 2; 
             case MEDIOCAMPO:
                 if (pos == Position.MCO) return 3;
-                return 4; // MC
+                return 4; 
             case DEFENSA:
                 if (pos == Position.LI || pos == Position.LD) return 5;
-                return 6; // DFC, CEN
+                return 6; 
             case ARQUERO:
-                return 10; // Arquero siempre último (puesto 11)
+                return 10; 
             default:
                 return 7;
         }
@@ -813,8 +804,8 @@ public class FulboServer {
             if (!s.isEmpty()) {
                 Player p = s.getPlayer();
                 if (p.getNativePosition().getCategory() == PositionCategory.DELANTERO ||
-                    p.getNativePosition().getCategory() == PositionCategory.MEDIOCAMPO ||
-                    p.getNativePosition() == Position.LI || p.getNativePosition() == Position.LD) {
+                        p.getNativePosition().getCategory() == PositionCategory.MEDIOCAMPO ||
+                        p.getNativePosition() == Position.LI || p.getNativePosition() == Position.LD) {
                     list.add(p);
                 }
             }
@@ -910,13 +901,13 @@ public class FulboServer {
     private String buildGameStateJson() {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
-        sb.append("\"userTeamName\":\"").append(escapeJson(userTeam != null ? userTeam.getName() : "ChiquiTeam")).append("\",");
+        sb.append("\"userTeamName\":").append(escapeJson(userTeam != null ? userTeam.getName() : "ChiquiTeam")).append(",");
         sb.append("\"currentDraftRound\":").append(currentDraftRound).append(",");
         sb.append("\"draftFinished\":").append(draftFinished).append(",");
         sb.append("\"rerollsRemaining\":").append(rerollsRemaining).append(",");
         sb.append("\"effectiveTeamRating\":").append((int) Math.round(userTeam.getEffectiveRating())).append(",");
 
-        // Choices
+        
         sb.append("\"choices\":[");
         for (int i = 0; i < currentChoices.size(); i++) {
             Player p = currentChoices.get(i);
@@ -936,7 +927,7 @@ public class FulboServer {
         }
         sb.append("],");
 
-        // Team Slots
+        
         sb.append("\"slots\":[");
         List<TeamSlot> slots = userTeam.getSlots();
         for (int i = 0; i < slots.size(); i++) {
@@ -967,7 +958,7 @@ public class FulboServer {
         }
         sb.append("],");
 
-        // Cup info
+        
         sb.append("\"currentCupRoundIndex\":").append(currentCupRoundIndex).append(",");
         sb.append("\"currentCupRoundName\":\"").append(CupRound.values()[currentCupRoundIndex].getDisplayName()).append("\",");
         sb.append("\"cupFinished\":").append(cupFinished).append(",");
@@ -1051,9 +1042,7 @@ public class FulboServer {
         }
     }
 
-    /**
-     * Handler para servir archivos HTML, CSS y JS desde la carpeta web.
-     */
+    
     private String parseTeamName(HttpExchange exchange) {
         try {
             if ("GET".equalsIgnoreCase(exchange.getRequestMethod())) {

@@ -3,12 +3,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * CLASE EXCLUSIVA DE CHIQUILEAGUE (NO UTILIZADA EN CHIQUICUP)
- *
- * Representa un encuentro regular de la ChiquiLeague (90 minutos reglamentarios).
- * No hay tiempo extra ni penales en fase de grupos.
- */
+
 public class LeagueMatch {
 
     private final int matchday;

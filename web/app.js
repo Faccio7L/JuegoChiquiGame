@@ -1,7 +1,7 @@
-// Estado global
+
 let gameState = null;
 let isSimulatingMatch = false;
-let simulationSpeedMultiplier = 1; // 1x o 2x
+let simulationSpeedMultiplier = 1; 
 let cupRunHistory = [];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -44,7 +44,7 @@ function setupEventListeners() {
         prepareNextCupMatchView();
     });
 
-    // Botones de Fin de Partida
+    
     document.getElementById('btn-play-again').addEventListener('click', () => {
         startNewGame();
     });
@@ -75,13 +75,61 @@ async function startNewGame() {
         });
         gameState = await res.json();
 
-        // Reset visual de paneles
-        document.getElementById('game-over-panel').classList.add('hidden');
-        document.getElementById('match-live-board').classList.add('hidden');
-        document.getElementById('post-match-actions').classList.add('hidden');
+        
+        const gameOverPanel = document.getElementById('game-over-panel');
+        if (gameOverPanel) gameOverPanel.classList.add('hidden');
+
+        const recapBox = document.getElementById('run-recap-content');
+        if (recapBox) recapBox.innerHTML = '';
+
+        const liveBoard = document.getElementById('match-live-board');
+        if (liveBoard) liveBoard.classList.add('hidden');
+
+        const postMatchActions = document.getElementById('post-match-actions');
+        if (postMatchActions) postMatchActions.classList.add('hidden');
+
+        const eventsLog = document.getElementById('events-log');
+        if (eventsLog) eventsLog.innerHTML = '';
+
+        const penaltiesDisplay = document.getElementById('penalties-display');
+        if (penaltiesDisplay) penaltiesDisplay.classList.add('hidden');
+
+        const penHomeDots = document.getElementById('pen-home-dots');
+        if (penHomeDots) penHomeDots.innerHTML = '';
+        const penAwayDots = document.getElementById('pen-away-dots');
+        if (penAwayDots) penAwayDots.innerHTML = '';
+
+        const penScoreText = document.getElementById('penalties-score-text');
+        if (penScoreText) penScoreText.textContent = '0 - 0';
+
+        const penStatusLine = document.getElementById('pen-status-line');
+        if (penStatusLine) penStatusLine.textContent = 'Preparando la serie...';
+
+        const resultBanner = document.getElementById('match-result-banner');
+        if (resultBanner) {
+            resultBanner.className = 'result-banner alert text-center p-3 hidden mb-3 font-chakra';
+            resultBanner.innerHTML = '';
+        }
+
+        const homeScoreEl = document.getElementById('live-home-score');
+        if (homeScoreEl) homeScoreEl.textContent = '0';
+        const awayScoreEl = document.getElementById('live-away-score');
+        if (awayScoreEl) awayScoreEl.textContent = '0';
+        const matchTimeEl = document.getElementById('live-match-time');
+        if (matchTimeEl) matchTimeEl.textContent = "0'";
+
         const playBtn = document.getElementById('btn-play-match');
-        playBtn.classList.remove('hidden');
-        playBtn.disabled = false;
+        if (playBtn) {
+            playBtn.classList.remove('hidden');
+            playBtn.disabled = false;
+        }
+
+        simulationSpeedMultiplier = 1;
+        const speedBtn = document.getElementById('btn-speed-toggle');
+        if (speedBtn) {
+            speedBtn.textContent = '1x Normal';
+            speedBtn.classList.remove('active');
+        }
 
         renderFullState();
     } catch (err) {
@@ -92,7 +140,7 @@ async function startNewGame() {
 function renderFullState() {
     if (!gameState) return;
 
-    // Header info
+    
     document.getElementById('header-rating').textContent = Math.round(gameState.effectiveTeamRating);
 
     const headerPhase = document.getElementById('header-phase');
@@ -111,7 +159,7 @@ function renderFullState() {
     renderPitch(gameState.slots);
 }
 
-// Cancha Táctica (Regla de negocio: recuadro verde si es óptima, amarillo si -3, rojo si -12)
+
 function renderPitch(slots) {
     if (!slots) return;
 
@@ -119,7 +167,7 @@ function renderPitch(slots) {
         const slotEl = document.getElementById(`slot-${slot.slotIndex}`);
         if (!slotEl) return;
 
-        // Reset de clases
+        
         slotEl.className = 'tactical-slot';
 
         if (slot.isEmpty) {
@@ -130,13 +178,13 @@ function renderPitch(slots) {
         } else {
             const penalty = Number(slot.penalty);
 
-            // Asignación de clase para el recuadro de color
+            
             if (penalty === 0.0) {
-                slotEl.classList.add('optima');          // Verde
+                slotEl.classList.add('optima');          
             } else if (penalty === 3.0) {
-                slotEl.classList.add('penalidad-cat');   // Amarillo
+                slotEl.classList.add('penalidad-cat');   
             } else if (penalty >= 12.0) {
-                slotEl.classList.add('penalidad-diff');  // Rojo
+                slotEl.classList.add('penalidad-diff');  
             }
 
             let rarityPill = '';
@@ -165,7 +213,7 @@ function renderPitch(slots) {
     });
 }
 
-// Renderizado de las 4 opciones de Draft con recuadro en la posición anticipando el encaje
+
 function renderDraft() {
     const roundTitle = document.getElementById('draft-round-title');
     const container = document.getElementById('choices-container');
@@ -192,7 +240,7 @@ function renderDraft() {
     }
 
     gameState.choices.forEach((player, idx) => {
-        // Clase de recuadro según dónde encajaría hoy: optima (verde), penalidad-cat (amarillo), penalidad-diff (rojo)
+        
         const fitClass = player.projectedFit || 'optima';
         const card = document.createElement('article');
         card.className = 'choice-card';
@@ -276,7 +324,7 @@ async function rerollDraftChoices() {
     }
 }
 
-// Configuración de la Copa
+
 function renderCupSetup() {
     const userTeamName = gameState.userTeamName || localStorage.getItem('userTeamName') || 'ChiquiTeam';
     document.getElementById('cup-stage-title').textContent = `COPA - ${gameState.currentCupRoundName.toUpperCase()}`;
@@ -295,7 +343,7 @@ function prepareNextCupMatchView() {
     document.getElementById('match-result-banner').className = 'result-banner hidden';
 }
 
-// Simulación de Partido
+
 async function playNextMatch() {
     isSimulatingMatch = true;
     const playBtn = document.getElementById('btn-play-match');
@@ -327,13 +375,13 @@ async function playNextMatch() {
         const res = await fetch('/api/cup/next-match', { method: 'POST' });
         const matchData = await res.json();
 
-        // Actualizar la ronda actual y siguiente en el estado global
+        
         if (matchData.nextCupRoundName) {
             gameState.currentCupRoundName = matchData.nextCupRoundName;
             gameState.currentCupRoundIndex = matchData.nextCupRoundIndex;
         }
 
-        // Registrar partido en el historial de la partida
+        
         cupRunHistory.push({
             roundName: matchData.roundName,
             opponentName: matchData.opponent.name,
@@ -348,11 +396,11 @@ async function playNextMatch() {
             userWon: matchData.userWon
         });
 
-        // Reflejar la ronda del partido actual en los títulos durante el juego
+        
         document.getElementById('header-phase').textContent = matchData.roundName;
         document.getElementById('cup-stage-title').textContent = `COPA - ${matchData.roundName.toUpperCase()}`;
 
-        // Datos del rival sorteado
+        
         document.getElementById('rival-name').textContent = matchData.opponent.name;
         document.getElementById('rival-rating').textContent = Math.round(matchData.opponent.baseMedia);
         awayNameEl.textContent = matchData.opponent.name;
@@ -366,7 +414,7 @@ async function playNextMatch() {
             eventsByMinute[e.minute] = e;
         });
 
-        // Simulación pausada con multiplicador x2
+        
         const getTickDelay = () => Math.round(140 / simulationSpeedMultiplier);
 
         for (let m = 1; m <= totalMinutes; m++) {
@@ -402,7 +450,7 @@ async function playNextMatch() {
             await sleep(getTickDelay());
         }
 
-        // Definición por Penales si correspondió
+        
         if (matchData.wentToPenalties) {
             await sleep(getTickDelay() * 6);
             penaltiesDisplay.classList.remove('hidden');
@@ -426,7 +474,7 @@ async function playNextMatch() {
 
             const kicks = matchData.penaltyKicks || [];
 
-            // Inicializar 5 puntos vacíos para cada equipo
+            
             const maxRounds = kicks.length ? Math.max(...kicks.map(k => k.round)) : 5;
             const regularRounds = Math.max(5, maxRounds);
             for (let i = 0; i < 5; i++) {
@@ -450,7 +498,7 @@ async function playNextMatch() {
                 if (penStatusLine) penStatusLine.textContent = `${teamName}: patea ${k.kicker}...`;
                 await sleep(getTickDelay() * 5);
 
-                // Crear punto para muerte súbita si supera 5
+                
                 if (k.round > 5) {
                     const container = k.isHome ? penHomeDots : penAwayDots;
                     const existing = document.getElementById(`pen-dot-${k.isHome ? 'h' : 'a'}-${k.round}`);
@@ -497,7 +545,7 @@ async function playNextMatch() {
         await sleep(getTickDelay() * 4);
         resultBanner.classList.remove('hidden');
 
-        // Portadas con estilo de crónica futbolera tradicional
+        
         if (matchData.userWon) {
             if (matchData.isFinalRound) {
                 resultBanner.className = 'result-banner champion';
@@ -533,7 +581,7 @@ async function playNextMatch() {
     }
 }
 
-// Renderiza el resumen completo de la partida al terminar
+
 function renderGameOverRecap(isChampion, finalRoundName) {
     const recapBox = document.getElementById('run-recap-content');
     const gameOverPanel = document.getElementById('game-over-panel');
@@ -582,7 +630,7 @@ function renderGameOverRecap(isChampion, finalRoundName) {
     gameOverPanel.classList.remove('hidden');
 }
 
-// Copiar al portapapeles o compartir
+
 function shareRunSummary() {
     if (!cupRunHistory.length) return;
 

@@ -2,12 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Carga de datos inicial para Fulbo:
- * - 32 Clubes categorizados con weights, baseMedia y tiers oficiales alineados a EA SPORTS FC 27.
- * - 352 Jugadores regulares (11 titulares por club en formación 4-3-3: 1 ARQ, 1 LI, 2 DFC, 1 LD, 2 MC, 1 MCO, 1 ED, 1 EL, 1 DC).
- * - Pool de 10 Leyendas/Ídolos históricos para eventos especiales.
- */
+
 public final class DataLoader {
 
     private DataLoader() {
@@ -52,7 +47,7 @@ public final class DataLoader {
 
     public static List<Player> createStandardPlayers() {
         return new ArrayList<>(Arrays.asList(
-                // --- River Plate ---
+                
                 new Player("Santiago Beltrán", "River Plate", Position.ARQ, 72.0),
                 new Player("Marcos Acuña", "River Plate", Position.LI, 77.0),
                 new Player("Nicolás Otamendi", "River Plate", Position.DFC, 78.0),
@@ -64,7 +59,7 @@ public final class DataLoader {
                 new Player("Franco Mastantuono", "River Plate", Position.ED, 78.0),
                 new Player("Angel Correa", "River Plate", Position.EL, 78.0),
                 new Player("Sebastián Driussi", "River Plate", Position.DC, 77.0),
-                // --- Boca Juniors ---
+                
                 new Player("Álvaro Montero", "Boca Juniors", Position.ARQ, 76.0),
                 new Player("Lautaro Blanco", "Boca Juniors", Position.LI, 76.0),
                 new Player("Marcos Rojo", "Boca Juniors", Position.DFC, 75.0),
@@ -76,7 +71,7 @@ public final class DataLoader {
                 new Player("Exequiel Zeballos", "Boca Juniors", Position.ED, 76.0),
                 new Player("Sebastián Villa", "Boca Juniors", Position.EL, 77.0),
                 new Player("Miguel Merentiel", "Boca Juniors", Position.DC, 77.0),
-                // --- Racing Club ---
+                
                 new Player("Facundo Cambeses", "Racing Club", Position.ARQ, 76.0),
                 new Player("Gabriel Rojas", "Racing Club", Position.LI, 75.0),
                 new Player("Marco Di Cesare", "Racing Club", Position.DFC, 76.0),
@@ -88,7 +83,7 @@ public final class DataLoader {
                 new Player("Santiago Solari", "Racing Club", Position.ED, 74.0),
                 new Player("Johan Carbonero", "Racing Club", Position.EL, 75.0),
                 new Player("Adrián 'Maravilla' Martínez", "Racing Club", Position.DC, 77.0),
-                // --- Independiente ---
+                
                 new Player("Rodrigo Rey", "Independiente", Position.ARQ, 75.0),
                 new Player("Facundo Zabala", "Independiente", Position.LI, 76.0),
                 new Player("Kevin Lomónaco", "Independiente", Position.DFC, 74.0),
@@ -100,7 +95,7 @@ public final class DataLoader {
                 new Player("Santiago Montiel", "Independiente", Position.ED, 78.0),
                 new Player("Matías Abaldo", "Independiente", Position.EL, 75.0),
                 new Player("Gabriel Ávalos", "Independiente", Position.DC, 76.0),
-                // --- Rosario Central ---
+                
                 new Player("Conan Ledesma", "Rosario Central", Position.ARQ, 76.0),
                 new Player("Agustín Sández", "Rosario Central", Position.LI, 73.0),
                 new Player("Carlos Quintana", "Rosario Central", Position.DFC, 74.0),
@@ -112,7 +107,7 @@ public final class DataLoader {
                 new Player("Ángel Di María", "Rosario Central", Position.ED, 82.0),
                 new Player("Jaminton Campaz", "Rosario Central", Position.EL, 76.0),
                 new Player("Marco Ruben", "Rosario Central", Position.DC, 74.0),
-                // --- Estudiantes LP ---
+                
                 new Player("Fernando Muslera", "Estudiantes LP", Position.ARQ, 78.0),
                 new Player("Gastón Benedetti", "Estudiantes LP", Position.LI, 73.0),
                 new Player("Facundo Rodríguez", "Estudiantes LP", Position.DFC, 74.0),
@@ -124,7 +119,7 @@ public final class DataLoader {
                 new Player("Tiago Palacios", "Estudiantes LP", Position.ED, 75.0),
                 new Player("Edwuin Cetré", "Estudiantes LP", Position.EL, 76.0),
                 new Player("Guido Carrillo", "Estudiantes LP", Position.DC, 76.0),
-                // --- Vélez Sarsfield ---
+                
                 new Player("Tomás Marchiori", "Vélez Sarsfield", Position.ARQ, 75.0),
                 new Player("Elías Gómez", "Vélez Sarsfield", Position.LI, 75.0),
                 new Player("Emanuel Mammana", "Vélez Sarsfield", Position.DFC, 75.0),
@@ -136,7 +131,7 @@ public final class DataLoader {
                 new Player("Matías Pellegrini", "Vélez Sarsfield", Position.ED, 73.0),
                 new Player("Diego Valdés", "Vélez Sarsfield", Position.EL, 74.0),
                 new Player("Braian Romero", "Vélez Sarsfield", Position.DC, 73.0),
-                // --- Talleres de Córdoba ---
+                
                 new Player("Ezequiel Unsain", "Talleres de Córdoba", Position.ARQ, 75.0),
                 new Player("Blas Riveros", "Talleres de Córdoba", Position.LI, 73.0),
                 new Player("Matías Catalán", "Talleres de Córdoba", Position.DFC, 73.0),
@@ -148,7 +143,7 @@ public final class DataLoader {
                 new Player("Diego Valoyes", "Talleres de Córdoba", Position.ED, 74.0),
                 new Player("Valentín Depietri", "Talleres de Córdoba", Position.EL, 68.0),
                 new Player("Federico Girotti", "Talleres de Córdoba", Position.DC, 75.0),
-                // --- Belgrano de Córdoba ---
+                
                 new Player("Thiago Cardozo", "Belgrano de Córdoba", Position.ARQ, 74.0),
                 new Player("Federico Ricca", "Belgrano de Córdoba", Position.LI, 72.0),
                 new Player("Leonardo Morales", "Belgrano de Córdoba", Position.DFC, 74.0),
@@ -160,7 +155,7 @@ public final class DataLoader {
                 new Player("Emiliano Rigoni", "Belgrano de Córdoba", Position.ED, 74.0),
                 new Player("Bryan Reyna", "Belgrano de Córdoba", Position.EL, 75.0),
                 new Player("Nicolás Fernández", "Belgrano de Córdoba", Position.DC, 77.0),
-                // --- Lanús ---
+                
                 new Player("Nahuel Losada", "Lanús", Position.ARQ, 76.0),
                 new Player("Sasha Marcich", "Lanús", Position.LI, 74.0),
                 new Player("Carlos Izquierdoz", "Lanús", Position.DFC, 74.0),
@@ -172,7 +167,7 @@ public final class DataLoader {
                 new Player("Eduardo Salvio", "Lanús", Position.ED, 74.0),
                 new Player("Felipe Peña Biafore", "Lanús", Position.EL, 70.0),
                 new Player("Walter Bou", "Lanús", Position.DC, 76.0),
-                // --- San Lorenzo ---
+                
                 new Player("Orlando Gill", "San Lorenzo", Position.ARQ, 72.0),
                 new Player("Malcom Braida", "San Lorenzo", Position.LI, 74.0),
                 new Player("Gastón Hernández", "San Lorenzo", Position.DFC, 74.0),
@@ -184,7 +179,7 @@ public final class DataLoader {
                 new Player("Ezequiel Cerutti", "San Lorenzo", Position.ED, 70.0),
                 new Player("Matías Reali", "San Lorenzo", Position.EL, 73.0),
                 new Player("Alexis Cuello", "San Lorenzo", Position.DC, 72.0),
-                // --- Huracán ---
+                
                 new Player("Hernán Galíndez", "Huracán", Position.ARQ, 74.0),
                 new Player("César Ibáñez", "Huracán", Position.LI, 70.0),
                 new Player("Martín Nervo", "Huracán", Position.DFC, 73.0),
@@ -196,7 +191,7 @@ public final class DataLoader {
                 new Player("Federico Vera", "Huracán", Position.ED, 70.0),
                 new Player("Facundo Waller", "Huracán", Position.EL, 72.0),
                 new Player("Ramón 'Wanchope' Ábila", "Huracán", Position.DC, 74.0),
-                // --- Argentinos Juniors ---
+                
                 new Player("Brayan Cortés", "Argentinos Juniors", Position.ARQ, 74.0),
                 new Player("Sebastián Prieto", "Argentinos Juniors", Position.LI, 72.0),
                 new Player("Francisco Álvarez", "Argentinos Juniors", Position.DFC, 75.0),
@@ -208,7 +203,7 @@ public final class DataLoader {
                 new Player("Gastón Verón", "Argentinos Juniors", Position.ED, 69.0),
                 new Player("Joaquín Gho", "Argentinos Juniors", Position.EL, 68.0),
                 new Player("Tomás Molina", "Argentinos Juniors", Position.DC, 72.0),
-                // --- Platense ---
+                
                 new Player("Juan Pablo Cozzani", "Platense", Position.ARQ, 73.0),
                 new Player("Tomás Silva", "Platense", Position.LI, 69.0),
                 new Player("Ignacio Vázquez", "Platense", Position.DFC, 74.0),
@@ -220,7 +215,7 @@ public final class DataLoader {
                 new Player("Guido Mainero", "Platense", Position.ED, 70.0),
                 new Player("Gastón Togni", "Platense", Position.EL, 73.0),
                 new Player("Nicolás 'Diente' López", "Platense", Position.DC, 74.0),
-                // --- Defensa y Justicia ---
+                
                 new Player("Matías Borgogno", "Defensa y Justicia", Position.ARQ, 73.0),
                 new Player("Fernando Román", "Defensa y Justicia", Position.LI, 68.0),
                 new Player("David Martínez", "Defensa y Justicia", Position.DFC, 73.0),
@@ -232,7 +227,7 @@ public final class DataLoader {
                 new Player("Julián López", "Defensa y Justicia", Position.ED, 70.0),
                 new Player("Domingo Blanco", "Defensa y Justicia", Position.EL, 71.0),
                 new Player("Leandro Fernández", "Defensa y Justicia", Position.DC, 68.0),
-                // --- Atlético Tucumán ---
+                
                 new Player("Luis Ingolotti", "Atlético Tucumán", Position.ARQ, 69.0),
                 new Player("Juan Infante", "Atlético Tucumán", Position.LI, 66.0),
                 new Player("Juan Gabriel Rodríguez", "Atlético Tucumán", Position.DFC, 73.0),
@@ -244,7 +239,7 @@ public final class DataLoader {
                 new Player("Renzo Tesuri", "Atlético Tucumán", Position.ED, 71.0),
                 new Player("Ramiro Ruiz Rodríguez", "Atlético Tucumán", Position.EL, 69.0),
                 new Player("Leandro Díaz", "Atlético Tucumán", Position.DC, 74.0),
-                // --- Unión de Santa Fe ---
+                
                 new Player("Matías Mansilla", "Unión de Santa Fe", Position.ARQ, 72.0),
                 new Player("Bruno Pittón", "Unión de Santa Fe", Position.LI, 67.0),
                 new Player("Juan Pablo Ludueña", "Unión de Santa Fe", Position.DFC, 68.0),
@@ -256,7 +251,7 @@ public final class DataLoader {
                 new Player("Julián Palacios", "Unión de Santa Fe", Position.ED, 73.0),
                 new Player("Franco Fragapane", "Unión de Santa Fe", Position.EL, 69.0),
                 new Player("Cristian Tarragona", "Unión de Santa Fe", Position.DC, 73.0),
-                // --- Independiente Rivadavia ---
+                
                 new Player("Ezequiel Centurión", "Independiente Rivadavia", Position.ARQ, 71.0),
                 new Player("Luciano Gómez", "Independiente Rivadavia", Position.LI, 72.0),
                 new Player("Sheyko Studer", "Independiente Rivadavia", Position.DFC, 73.0),
@@ -268,7 +263,7 @@ public final class DataLoader {
                 new Player("Maximiliano Salas", "Independiente Rivadavia", Position.ED, 75.0),
                 new Player("Gonzalo Ríos", "Independiente Rivadavia", Position.EL, 69.0),
                 new Player("Alex Arce", "Independiente Rivadavia", Position.DC, 76.0),
-                // --- Tigre ---
+                
                 new Player("Felipe Zenobio", "Tigre", Position.ARQ, 70.0),
                 new Player("Federico Álvarez", "Tigre", Position.LI, 66.0),
                 new Player("Joaquín Laso", "Tigre", Position.DFC, 71.0),
@@ -280,7 +275,7 @@ public final class DataLoader {
                 new Player("Jabes Saralegui", "Tigre", Position.ED, 70.0),
                 new Player("Ian Subiabre", "Tigre", Position.EL, 71.0),
                 new Player("Ignacio Russo", "Tigre", Position.DC, 71.0),
-                // --- Instituto de Córdoba ---
+                
                 new Player("Marcos Ledesma", "Instituto de Córdoba", Position.ARQ, 70.0),
                 new Player("Diego Sosa", "Instituto de Córdoba", Position.LI, 70.0),
                 new Player("Jonathan Galván", "Instituto de Córdoba", Position.DFC, 70.0),
@@ -292,7 +287,7 @@ public final class DataLoader {
                 new Player("Jhon Córdoba", "Instituto de Córdoba", Position.ED, 70.0),
                 new Player("Damián Puebla", "Instituto de Córdoba", Position.EL, 71.0),
                 new Player("Facundo Suárez", "Instituto de Córdoba", Position.DC, 66.0),
-                // --- Newell's Old Boys ---
+                
                 new Player("Gabriel Arias", "Newell's Old Boys", Position.ARQ, 73.0),
                 new Player("Ángelo Martino", "Newell's Old Boys", Position.LI, 73.0),
                 new Player("Lautaro Giannetti", "Newell's Old Boys", Position.DFC, 69.0),
@@ -304,7 +299,7 @@ public final class DataLoader {
                 new Player("Walter Mazzantti", "Newell's Old Boys", Position.ED, 69.0),
                 new Player("Ramiro Sordo", "Newell's Old Boys", Position.EL, 72.0),
                 new Player("Matías Cóccaro", "Newell's Old Boys", Position.DC, 70.0),
-                // --- Central Córdoba (SdE) ---
+                
                 new Player("Alan Aguerre", "Central Córdoba (SdE)", Position.ARQ, 70.0),
                 new Player("Leonardo Marchi", "Central Córdoba (SdE)", Position.LI, 65.0),
                 new Player("Felipe Aguilar", "Central Córdoba (SdE)", Position.DFC, 71.0),
@@ -316,7 +311,7 @@ public final class DataLoader {
                 new Player("Leonardo Sequeira", "Central Córdoba (SdE)", Position.ED, 69.0),
                 new Player("Horacio Tijanovich", "Central Córdoba (SdE)", Position.EL, 68.0),
                 new Player("Michael Santos", "Central Córdoba (SdE)", Position.DC, 71.0),
-                // --- Barracas Central ---
+                
                 new Player("Juan Espínola", "Barracas Central", Position.ARQ, 71.0),
                 new Player("Rodrigo Insua", "Barracas Central", Position.LI, 72.0),
                 new Player("Yonatthan Rak", "Barracas Central", Position.DFC, 70.0),
@@ -328,7 +323,7 @@ public final class DataLoader {
                 new Player("Gonzalo Morales", "Barracas Central", Position.ED, 70.0),
                 new Player("Nicolás Orsini", "Barracas Central", Position.EL, 69.0),
                 new Player("Facundo Bruera", "Barracas Central", Position.DC, 70.0),
-                // --- Gimnasia LP ---
+                
                 new Player("Nelson Insfrán", "Gimnasia LP", Position.ARQ, 74.0),
                 new Player("Pedro Silva Torrejón", "Gimnasia LP", Position.LI, 68.0),
                 new Player("Germán Conti", "Gimnasia LP", Position.DFC, 73.0),
@@ -340,7 +335,7 @@ public final class DataLoader {
                 new Player("Manuel Panaro", "Gimnasia LP", Position.ED, 66.0),
                 new Player("Brian Andrada", "Gimnasia LP", Position.EL, 64.0),
                 new Player("Jorge de Asís", "Gimnasia LP", Position.DC, 65.0),
-                // --- Gimnasia y Esgrima (M) ---
+                
                 new Player("César Rigamonti", "Gimnasia y Esgrima (M)", Position.ARQ, 70.0),
                 new Player("Facundo Lencioni", "Gimnasia y Esgrima (M)", Position.LI, 68.0),
                 new Player("Ezequiel Muñoz", "Gimnasia y Esgrima (M)", Position.DFC, 72.0),
@@ -352,7 +347,7 @@ public final class DataLoader {
                 new Player("Ignacio Sabatini", "Gimnasia y Esgrima (M)", Position.ED, 67.0),
                 new Player("Matías Vargas", "Gimnasia y Esgrima (M)", Position.EL, 78.0),
                 new Player("Santiago Rodríguez", "Gimnasia y Esgrima (M)", Position.DC, 69.0),
-                // --- Banfield ---
+                
                 new Player("Diego Rodríguez", "Banfield", Position.ARQ, 73.0),
                 new Player("Ignacio Abraham", "Banfield", Position.LI, 69.0),
                 new Player("Nicolás Meriano", "Banfield", Position.DFC, 70.0),
@@ -364,7 +359,7 @@ public final class DataLoader {
                 new Player("David Zalazar", "Banfield", Position.ED, 68.0),
                 new Player("Tomás Adoryán", "Banfield", Position.EL, 67.0),
                 new Player("Bruno Sepúlveda", "Banfield", Position.DC, 68.0),
-                // --- Sarmiento de Junín ---
+                
                 new Player("Iván Mauricio Arboleda", "Sarmiento de Junín", Position.ARQ, 68.0),
                 new Player("Gabriel Díaz Núñez", "Sarmiento de Junín", Position.LI, 68.0),
                 new Player("Agustín Seyral", "Sarmiento de Junín", Position.DFC, 66.0),
@@ -376,7 +371,7 @@ public final class DataLoader {
                 new Player("Joaquín Gho", "Sarmiento de Junín", Position.ED, 68.0),
                 new Player("Nicolás Pasquini", "Sarmiento de Junín", Position.EL, 69.0),
                 new Player("Junior Marabel", "Sarmiento de Junín", Position.DC, 70.0),
-                // --- Deportivo Riestra ---
+                
                 new Player("Ignacio Arce", "Deportivo Riestra", Position.ARQ, 74.0),
                 new Player("Rodrigo Gallo", "Deportivo Riestra", Position.LI, 64.0),
                 new Player("Carlos Quintana", "Deportivo Riestra", Position.DFC, 74.0),
@@ -388,7 +383,7 @@ public final class DataLoader {
                 new Player("Walter Acuña", "Deportivo Riestra", Position.ED, 66.0),
                 new Player("Antony Alonso", "Deportivo Riestra", Position.EL, 67.0),
                 new Player("Jonathan Herrera", "Deportivo Riestra", Position.DC, 68.0),
-                // --- Aldosivi ---
+                
                 new Player("Sebastián Moyano", "Aldosivi", Position.ARQ, 69.0),
                 new Player("Lucas Rodríguez", "Aldosivi", Position.LI, 65.0),
                 new Player("Leonardo Sigali", "Aldosivi", Position.DFC, 72.0),
@@ -400,7 +395,7 @@ public final class DataLoader {
                 new Player("Nicolás Laméndola", "Aldosivi", Position.ED, 65.0),
                 new Player("Agustín Alonso", "Aldosivi", Position.EL, 65.0),
                 new Player("Andrés Vombergar", "Aldosivi", Position.DC, 73.0),
-                // --- Colón de Santa Fe ---
+                
                 new Player("Manuel Vicentini", "Colón de Santa Fe", Position.ARQ, 64.0),
                 new Player("Facundo Castet", "Colón de Santa Fe", Position.LI, 65.0),
                 new Player("Hernán Lópes", "Colón de Santa Fe", Position.DFC, 66.0),
@@ -412,7 +407,7 @@ public final class DataLoader {
                 new Player("Federico Jourdan", "Colón de Santa Fe", Position.ED, 66.0),
                 new Player("Ignacio Lago", "Colón de Santa Fe", Position.EL, 66.0),
                 new Player("Javier Toledo", "Colón de Santa Fe", Position.DC, 66.0),
-                // --- Estudiantes (RC) ---
+                
                 new Player("Lucas Bruera", "Estudiantes (RC)", Position.ARQ, 66.0),
                 new Player("Ignacio Abraham", "Estudiantes (RC)", Position.LI, 65.0),
                 new Player("Gonzalo Maffini", "Estudiantes (RC)", Position.DFC, 66.0),
@@ -424,7 +419,7 @@ public final class DataLoader {
                 new Player("Nahuel Cainelli", "Estudiantes (RC)", Position.ED, 65.0),
                 new Player("Mauro Valiente", "Estudiantes (RC)", Position.EL, 65.0),
                 new Player("Yeison Moreno", "Estudiantes (RC)", Position.DC, 64.0),
-                // --- Ferro Carril Oeste ---
+                
                 new Player("Mariano Monllor", "Ferro Carril Oeste", Position.ARQ, 65.0),
                 new Player("Martín Rodríguez", "Ferro Carril Oeste", Position.LI, 64.0),
                 new Player("Patricio Boolsen", "Ferro Carril Oeste", Position.DFC, 66.0),

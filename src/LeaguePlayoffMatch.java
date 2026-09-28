@@ -1,11 +1,6 @@
 import java.util.Objects;
 
-/**
- * CLASE EXCLUSIVA DE CHIQUILEAGUE (NO UTILIZADA EN CHIQUICUP)
- *
- * Representa una llave de eliminación directa en los Playoffs de la ChiquiLeague.
- * Incluye tiempo reglamentario, alargue si hay empate a los 90', y definición por penales si persiste el empate a los 120'.
- */
+
 public class LeaguePlayoffMatch {
 
     private final LeaguePlayoffRound round;

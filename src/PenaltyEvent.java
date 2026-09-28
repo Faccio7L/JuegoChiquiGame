@@ -1,6 +1,4 @@
-/**
- * Representa la ejecución de un tiro en la tanda de penales.
- */
+
 public class PenaltyEvent {
     private final int roundNumber;
     private final boolean isHomeTeam;

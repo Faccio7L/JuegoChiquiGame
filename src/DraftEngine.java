@@ -3,31 +3,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * Motor de draft de ChiquiCup.
- * Reglas implementadas:
- * - Ronda 1: 4 arqueros a elegir, garantiza cobertura del puesto.
- * - Rondas 2 a 11: 4 jugadores de campo al azar, con sesgo ponderado hacia posiciones vacias.
- *
- * Calibracion de rarezas y boosts (probabilidad acumulada por cuadradito ~ 2.5%):
- * - ORO: ~1.40% (+3 de media explicito, el mas comun de los boosts)
- * - DIAMANTE: ~0.70% (+5 de media explicito)
- * - LEYENDA: ~0.40% (Idolos historicos del futbol argentino con media pico)
- * - NORMAL: ~97.50%
- *
- * Esto garantiza aproximadamente un 60% de probabilidad por partida de que el usuario
- * consiga al menos un tipo de boost (con suerte 2 o 3, o excepcionalmente 0),
- * haciendo el juego levemente mas accesible.
- */
+
 public class DraftEngine {
 
     private static final double BIAS_PER_EMPTY_SLOT = 0.6;
     private static final double BASE_WEIGHT = 1.0;
 
-    // Umbrales de probabilidad por cuadradito (evaluacion acumulativa - total 2.50%)
-    private static final double PROB_LEYENDA = 0.0040;                 // 0.40% Leyenda
-    private static final double PROB_DIAMANTE = PROB_LEYENDA + 0.0070; // 1.10% acumulado (+0.70% Diamante)
-    private static final double PROB_ORO = PROB_DIAMANTE + 0.0140;     // 2.50% acumulado (+1.40% Oro)
+    
+    private static final double PROB_LEYENDA = 0.0040;                 
+    private static final double PROB_DIAMANTE = PROB_LEYENDA + 0.0070; 
+    private static final double PROB_ORO = PROB_DIAMANTE + 0.0140;     
 
     private final List<Player> goalkeeperPool;
     private final List<Player> fieldPlayerPool;
@@ -56,10 +41,7 @@ public class DraftEngine {
         this(goalkeeperPool, fieldPlayerPool, DataLoader.createIdolPool(), random);
     }
 
-    /**
-     * Ronda 1: 4 arqueros distintos, sorteados de forma uniforme,
-     * con evaluacion independiente de rareza (Oro, Diamante o Idolo).
-     */
+    
     public List<Player> nextGoalkeeperChoices() {
         List<Player> raw = pickDistinctUniform(goalkeeperPool, 4);
         List<Player> result = new ArrayList<>(raw.size());
@@ -73,10 +55,7 @@ public class DraftEngine {
         return result;
     }
 
-    /**
-     * Rondas 2 a 11: 4 jugadores de campo distintos, sorteados con
-     * ponderacion segun categorias faltantes y evaluacion de rarezas.
-     */
+    
     public List<Player> nextFieldPlayerChoices(Team team) {
         Map<PositionCategory, Long> emptyByCategory = team.countEmptySlotsByCategory();
         List<Player> available = new ArrayList<>(fieldPlayerPool);
@@ -93,17 +72,13 @@ public class DraftEngine {
         return result;
     }
 
-    /**
-     * Metodo de compatibilidad para evaluar rareza de un jugador base.
-     */
+    
     public Player rollRarityForChoice(Player player) {
         if (player == null) return null;
         return rollRarity(player, player.getNativePosition() == Position.ARQ, new ArrayList<>());
     }
 
-    /**
-     * Sorteo de rareza calibrado para cumplir con el 60% por partida de al menos un boost.
-     */
+    
     private Player rollRarity(Player base, boolean isGoalkeeper, List<String> excludedNames) {
         if (base == null) return null;
         double roll = random.nextDouble();
@@ -135,7 +110,7 @@ public class DraftEngine {
         return candidates.get(random.nextInt(candidates.size()));
     }
 
-    /** Elimina un jugador del pool una vez que fue ofrecido y decidido (tomado o descartado). */
+    
     public void removeFromPool(Player player) {
         if (player == null) return;
         goalkeeperPool.removeIf(p -> p.getName().equalsIgnoreCase(player.getName()));

@@ -1,17 +1,8 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
-/**
- * CLASE EXCLUSIVA DE CHIQUILEAGUE (NO UTILIZADA EN CHIQUICUP)
- *
- * Genera el fixture completo de 15 fechas para 30 clubes (15 en Zona A y 15 en Zona B).
- * En cada fecha se disputan:
- * - 7 partidos dentro de la Zona A
- * - 7 partidos dentro de la Zona B
- * - 1 partido Interzonal (Clásico entre el equipo libre de Zona A y el libre de Zona B)
- * Total: 15 partidos por fecha (14 simulados en segundo plano + 1 jugado por el usuario).
- */
 public class LeagueFixture {
 
     public static class ClassicPair {
@@ -38,6 +29,30 @@ public class LeagueFixture {
         }
     }
 
+    public static class LeagueSetup {
+        private final List<String> zoneATeams;
+        private final List<String> zoneBTeams;
+        private final List<List<LeagueMatch>> matchdays;
+
+        public LeagueSetup(List<String> zoneATeams, List<String> zoneBTeams, List<List<LeagueMatch>> matchdays) {
+            this.zoneATeams = zoneATeams;
+            this.zoneBTeams = zoneBTeams;
+            this.matchdays = matchdays;
+        }
+
+        public List<String> getZoneATeams() {
+            return zoneATeams;
+        }
+
+        public List<String> getZoneBTeams() {
+            return zoneBTeams;
+        }
+
+        public List<List<LeagueMatch>> getMatchdays() {
+            return matchdays;
+        }
+    }
+
     public static List<ClassicPair> getClassicPairs(String userTeamName) {
         String name = (userTeamName != null && !userTeamName.trim().isEmpty()) ? userTeamName.trim() : "ChiquiTeam";
         return List.of(
@@ -57,6 +72,45 @@ public class LeagueFixture {
                 new ClassicPair("Tigre", "Barracas Central", "Duelo Metropolitano"),
                 new ClassicPair(name, "Deportivo Riestra", "Interzonal Especial ChiquiLeague")
         );
+    }
+
+    public static LeagueSetup generateSetup(String userTeamName, Random random) {
+        String name = (userTeamName != null && !userTeamName.trim().isEmpty()) ? userTeamName.trim() : "ChiquiTeam";
+        List<ClassicPair> base = getClassicPairs(name);
+        List<ClassicPair> cpuPairs = new ArrayList<>(base.subList(0, 14));
+        Collections.shuffle(cpuPairs, random);
+
+        List<String> zoneA = new ArrayList<>();
+        List<String> zoneB = new ArrayList<>();
+
+        for (ClassicPair p : cpuPairs) {
+            if (random.nextBoolean()) {
+                zoneA.add(p.getTeamA());
+                zoneB.add(p.getTeamB());
+            } else {
+                zoneA.add(p.getTeamB());
+                zoneB.add(p.getTeamA());
+            }
+        }
+
+        zoneA.add(name);
+        zoneB.add("Deportivo Riestra");
+
+        List<Integer> order = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            order.add(i);
+        }
+        Collections.shuffle(order, random);
+
+        List<String> shuffledZoneA = new ArrayList<>(15);
+        List<String> shuffledZoneB = new ArrayList<>(15);
+        for (int i = 0; i < 15; i++) {
+            shuffledZoneA.add(zoneA.get(order.get(i)));
+            shuffledZoneB.add(zoneB.get(order.get(i)));
+        }
+
+        List<List<LeagueMatch>> matchdays = buildMatchdays(shuffledZoneA, shuffledZoneB, name);
+        return new LeagueSetup(shuffledZoneA, shuffledZoneB, matchdays);
     }
 
     public static List<String> getZoneATeams(String userTeamName) {
@@ -87,16 +141,15 @@ public class LeagueFixture {
         return generate15Matchdays("ChiquiTeam");
     }
 
-    /**
-     * Genera la lista de partidos de las 15 fechas mediante el algoritmo de polígono / círculo.
-     * En cada fecha se garantiza que cada equipo juegue exactamente 1 partido (en su zona o interzonal).
-     */
     public static List<List<LeagueMatch>> generate15Matchdays(String userTeamName) {
         String name = (userTeamName != null && !userTeamName.trim().isEmpty()) ? userTeamName.trim() : "ChiquiTeam";
         List<String> zoneA = getZoneATeams(name);
         List<String> zoneB = getZoneBTeams(name);
-        int n = 15;
+        return buildMatchdays(zoneA, zoneB, name);
+    }
 
+    public static List<List<LeagueMatch>> buildMatchdays(List<String> zoneA, List<String> zoneB, String userTeamName) {
+        int n = 15;
         List<List<LeagueMatch>> matchdays = new ArrayList<>();
         List<Integer> circle = new ArrayList<>();
         for (int i = 0; i < n; i++) {
@@ -107,23 +160,19 @@ public class LeagueFixture {
             int matchdayNum = r + 1;
             List<LeagueMatch> fechaMatches = new ArrayList<>();
 
-            // El equipo en circle.get(0) es el libre de la fecha en su zona y disputa el INTERZONAL
             int byeIdx = circle.get(0);
             String teamA_bye = zoneA.get(byeIdx);
             String teamB_bye = zoneB.get(byeIdx);
-            boolean isUserInterzonal = isUser(teamA_bye, name) || isUser(teamB_bye, name);
+            boolean isUserInterzonal = isUser(teamA_bye, userTeamName) || isUser(teamB_bye, userTeamName);
 
-            // 1. Partido Interzonal
             fechaMatches.add(new LeagueMatch(matchdayNum, teamA_bye, teamB_bye, true, isUserInterzonal));
 
-            // 2. Siete partidos dentro de la Zona A
             for (int i = 1; i <= 7; i++) {
                 int idx1 = circle.get(i);
                 int idx2 = circle.get(15 - i);
                 String t1 = zoneA.get(idx1);
                 String t2 = zoneA.get(idx2);
-                boolean isUserM = isUser(t1, name) || isUser(t2, name);
-                // Alternar localía por fecha
+                boolean isUserM = isUser(t1, userTeamName) || isUser(t2, userTeamName);
                 if ((r + i) % 2 == 0) {
                     fechaMatches.add(new LeagueMatch(matchdayNum, t1, t2, false, isUserM));
                 } else {
@@ -131,13 +180,12 @@ public class LeagueFixture {
                 }
             }
 
-            // 3. Siete partidos dentro de la Zona B
             for (int i = 1; i <= 7; i++) {
                 int idx1 = circle.get(i);
                 int idx2 = circle.get(15 - i);
                 String t1 = zoneB.get(idx1);
                 String t2 = zoneB.get(idx2);
-                boolean isUserM = isUser(t1, name) || isUser(t2, name);
+                boolean isUserM = isUser(t1, userTeamName) || isUser(t2, userTeamName);
                 if ((r + i) % 2 == 0) {
                     fechaMatches.add(new LeagueMatch(matchdayNum, t1, t2, false, isUserM));
                 } else {
@@ -147,7 +195,6 @@ public class LeagueFixture {
 
             matchdays.add(fechaMatches);
 
-            // Rotar el círculo (el último pasa al frente)
             int last = circle.remove(circle.size() - 1);
             circle.add(0, last);
         }

@@ -1,7 +1,4 @@
-/**
- * Un puesto de la formación (ej. "DFC #1") con el jugador que lo ocupa,
- * si ya fue asignado.
- */
+
 public class TeamSlot {
 
     private final Position requiredPosition;
@@ -27,12 +24,7 @@ public class TeamSlot {
         this.player = player;
     }
 
-    /**
-     * Media efectiva del jugador asignado a este slot, aplicando la
-     * penalización por posición sobre la media base efectiva (incluyendo bono ORO/DIAMANTE):
-     * -3 si es de la misma categoría pero distinta posición específica,
-     * -12 si es de categoría distinta, 0 si coincide exactamente.
-     */
+    
     public double getEffectiveMedia() {
         if (player == null) {
             return 0.0;

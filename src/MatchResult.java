@@ -2,11 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Resultado completo de un partido: goles minuto a minuto, marcador en los
- * 90', marcador final tras eventual tiempo extra, y definición por penales
- * si correspondió.
- */
+
 public class MatchResult {
 
     private final List<GoalEvent> events = new ArrayList<>();
@@ -57,7 +53,7 @@ public class MatchResult {
                 .count();
     }
 
-    /** Goles totales (incluyendo tiempo extra si lo hubo), sin contar penales. */
+    
     public int getFinalHomeGoals() {
         return (int) events.stream().filter(GoalEvent::isHomeTeamScored).count();
     }

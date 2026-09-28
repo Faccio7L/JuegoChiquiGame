@@ -1,23 +1,6 @@
 import java.util.*;
 
-/**
- * CLASE EXCLUSIVA DE CHIQUILEAGUE (NO UTILIZADA EN CHIQUICUP)
- *
- * Motor integral de la ChiquiLeague:
- * 1. Fase Regular (15 Fechas):
- *    - 30 Clubes (15 en Zona A incluyendo "Tu Equipo", 15 en Zona B).
- *    - Cada fecha tiene 15 partidos (7 de Zona A, 7 de Zona B, 1 Interzonal de clásicos).
- *    - El usuario juega su partido en vivo con relato de goles reales.
- *    - Los otros 14 partidos se simulan en segundo plano por fecha.
- *    - Se asignan 3 puntos por victoria, 1 por empate, 0 por derrota (solo 90 minutos reglamentarios).
- *    - Tabla de posiciones por ZONA con desempate por diferencia de gol y goles a favor.
- *
- * 2. Fase de Playoffs (Eliminación Directa):
- *    - Clasifican los primeros 8 de la Zona A y los primeros 8 de la Zona B (16 equipos).
- *    - Cruces cruzados: 1°A vs 8°B, 2°A vs 7°B, 3°A vs 6°B, 4°A vs 5°B, 1°B vs 8°A, 2°B vs 7°A, 3°B vs 6°A, 4°B vs 5°A.
- *    - Rondas: Octavos (boost rival 0), Cuartos (boost rival 2), Semis (boost rival 4), Final (boost rival 6).
- *    - Si hay empate a los 90' -> Alargue (120') -> Penales tiro a tiro con pateadores reales.
- */
+
 public class LeagueEngine {
 
     private final Random random;
@@ -25,16 +8,16 @@ public class LeagueEngine {
     private List<Player> allPlayersMasterList = new ArrayList<>();
     private final Map<String, Club> clubsByName = new HashMap<>();
 
-    // Tablas de posiciones
+    
     private final Map<String, LeagueTeamStanding> standingsA = new LinkedHashMap<>();
     private final Map<String, LeagueTeamStanding> standingsB = new LinkedHashMap<>();
 
-    // Fixture de 15 fechas
+    
     private List<List<LeagueMatch>> fixture = new ArrayList<>();
-    private int currentMatchdayIndex = 0; // 0 a 14 (Fechas 1 a 15)
+    private int currentMatchdayIndex = 0; 
     private boolean regularSeasonFinished = false;
 
-    // Playoffs
+    
     private boolean playoffPhase = false;
     private LeaguePlayoffRound currentPlayoffRound;
     private List<LeaguePlayoffMatch> currentPlayoffMatches = new ArrayList<>();
@@ -68,27 +51,26 @@ public class LeagueEngine {
             clubsByName.put(c.getName(), c);
         }
 
-        // Crear tabla de posiciones para Zona A
+        LeagueFixture.LeagueSetup setup = LeagueFixture.generateSetup(userTeamName, random);
+
         standingsA.clear();
-        for (String teamName : LeagueFixture.getZoneATeams(userTeamName)) {
+        for (String teamName : setup.getZoneATeams()) {
             double media = isUser(teamName) ? userTeam.getEffectiveRating() : getClubMedia(teamName);
             boolean isUserTeam = isUser(teamName);
             standingsA.put(teamName, new LeagueTeamStanding(teamName, LeagueZone.ZONA_A, media, isUserTeam));
         }
 
-        // Crear tabla de posiciones para Zona B
         standingsB.clear();
-        for (String teamName : LeagueFixture.getZoneBTeams(userTeamName)) {
+        for (String teamName : setup.getZoneBTeams()) {
             double media = getClubMedia(teamName);
             standingsB.put(teamName, new LeagueTeamStanding(teamName, LeagueZone.ZONA_B, media, false));
         }
 
-        // Generar fixture
-        this.fixture = LeagueFixture.generate15Matchdays(userTeamName);
+        this.fixture = setup.getMatchdays();
         this.currentMatchdayIndex = 0;
         this.regularSeasonFinished = false;
 
-        // Reset estado playoffs
+        
         this.playoffPhase = false;
         this.currentPlayoffRound = null;
         this.currentPlayoffMatches.clear();
@@ -99,9 +81,7 @@ public class LeagueEngine {
         this.userWonLeague = false;
     }
 
-    /**
-     * Retorna el partido de la fecha actual que le corresponde disputar a Tu Equipo.
-     */
+    
     public LeagueMatch getCurrentUserMatch() {
         if (currentMatchdayIndex >= fixture.size() || regularSeasonFinished) {
             return null;
@@ -114,12 +94,7 @@ public class LeagueEngine {
         return null;
     }
 
-    /**
-     * Simula la fecha completa (15 partidos):
-     * - El partido de Tu Equipo (con eventos de gol detallados).
-     * - Los otros 14 partidos simulados en segundo plano.
-     * - Actualiza las tablas de posiciones de ambas zonas.
-     */
+    
     public List<LeagueMatch> playCurrentMatchday() {
         if (regularSeasonFinished || playoffPhase) {
             throw new IllegalStateException("La fase regular ya ha finalizado.");
@@ -132,7 +107,7 @@ public class LeagueEngine {
 
         for (LeagueMatch m : matches) {
             if (m.isUserMatch()) {
-                // Partido del usuario
+                
                 boolean homeIsUser = isUser(m.getHomeTeam());
                 String opponentName = homeIsUser ? m.getAwayTeam() : m.getHomeTeam();
                 double userRating = userTeam.getEffectiveRating();
@@ -144,11 +119,11 @@ public class LeagueEngine {
                 MatchResult result = simulate90Minutes(userRating, opponentRating, homeIsUser, userAttackers, rivalPlayers, opponentName);
                 m.setResult(result.getFinalHomeGoals(), result.getFinalAwayGoals(), result.getEvents());
 
-                // Actualizar posiciones
+                
                 recordStandingMatch(m.getHomeTeam(), result.getFinalHomeGoals(), result.getFinalAwayGoals());
                 recordStandingMatch(m.getAwayTeam(), result.getFinalAwayGoals(), result.getFinalHomeGoals());
             } else {
-                // Partido entre clubes CPU en segundo plano
+                
                 double homeRating = getClubMedia(m.getHomeTeam());
                 double awayRating = getClubMedia(m.getAwayTeam());
                 List<Player> homeScorers = getPlayersForClub(m.getHomeTeam());
@@ -164,7 +139,7 @@ public class LeagueEngine {
 
         currentMatchdayIndex++;
 
-        // Si se completaron las 15 fechas, finalizar fase regular y armar playoffs
+        
         if (currentMatchdayIndex >= fixture.size()) {
             regularSeasonFinished = true;
             initPlayoffs();
@@ -173,10 +148,7 @@ public class LeagueEngine {
         return matches;
     }
 
-    /**
-     * Inicializa los Playoffs con los primeros 8 de cada grupo tras las 15 fechas.
-     * Cruces: 1A vs 8B, 4B vs 5A, 2A vs 7B, 3B vs 6A, 1B vs 8A, 4A vs 5B, 2B vs 7A, 3A vs 6B.
-     */
+    
     private void initPlayoffs() {
         playoffPhase = true;
         currentPlayoffRound = LeaguePlayoffRound.OCTAVOS;
@@ -184,7 +156,7 @@ public class LeagueEngine {
         List<LeagueTeamStanding> sortedA = getSortedStandingsA();
         List<LeagueTeamStanding> sortedB = getSortedStandingsB();
 
-        // Verificar si el usuario clasificó entre los 8 mejores de la Zona A
+        
         userQualifiedForPlayoffs = false;
         for (int i = 0; i < 8; i++) {
             if (sortedA.get(i).isUserTeam()) {
@@ -196,22 +168,22 @@ public class LeagueEngine {
         currentPlayoffMatches.clear();
         lastPlayedPlayoffMatches.clear();
 
-        // 8 Llaves de Octavos de Final
-        // Llave 1: 1°A vs 8°B
+        
+        
         currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.OCTAVOS, sortedA.get(0).getTeamName(), sortedB.get(7).getTeamName()));
-        // Llave 2: 4°B vs 5°A
+        
         currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.OCTAVOS, sortedB.get(3).getTeamName(), sortedA.get(4).getTeamName()));
-        // Llave 3: 2°A vs 7°B
+        
         currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.OCTAVOS, sortedA.get(1).getTeamName(), sortedB.get(6).getTeamName()));
-        // Llave 4: 3°B vs 6°A
+        
         currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.OCTAVOS, sortedB.get(2).getTeamName(), sortedA.get(5).getTeamName()));
-        // Llave 5: 1°B vs 8°A
+        
         currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.OCTAVOS, sortedB.get(0).getTeamName(), sortedA.get(7).getTeamName()));
-        // Llave 6: 4°A vs 5°B
+        
         currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.OCTAVOS, sortedA.get(3).getTeamName(), sortedB.get(4).getTeamName()));
-        // Llave 7: 2°B vs 7°A
+        
         currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.OCTAVOS, sortedB.get(1).getTeamName(), sortedA.get(6).getTeamName()));
-        // Llave 8: 3°A vs 6°B
+        
         currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.OCTAVOS, sortedA.get(2).getTeamName(), sortedB.get(5).getTeamName()));
     }
 
@@ -220,11 +192,7 @@ public class LeagueEngine {
         return new LeaguePlayoffMatch(round, team1, team2, isUser);
     }
 
-    /**
-     * Simula la ronda de eliminación directa actual de los Playoffs.
-     * En caso de empate a los 90', hay alargue (120') y penales si persiste la igualdad.
-     * El rival del usuario recibe el boost correspondiente a la ronda (Octavos 0, Cuartos 2, Semis 4, Final 6).
-     */
+    
     public List<LeaguePlayoffMatch> playCurrentPlayoffRound() {
         if (!playoffPhase || currentPlayoffRound == null) {
             throw new IllegalStateException("No hay ronda de playoffs activa.");
@@ -242,7 +210,7 @@ public class LeagueEngine {
                 boolean homeIsUser = isUser(home);
                 String opponentName = homeIsUser ? away : home;
                 double userRating = userTeam.getEffectiveRating();
-                // Boost acumulado por ronda de playoff (0, 2, 4, 6)
+                
                 double opponentRating = getClubMedia(opponentName) + currentPlayoffRound.getRivalHiddenBoost();
 
                 List<Player> userAttackers = getUserOffensivePlayers();
@@ -257,7 +225,7 @@ public class LeagueEngine {
                     userEliminated = true;
                 }
             } else {
-                // Partido CPU vs CPU en playoffs
+                
                 double homeRating = getClubMedia(home);
                 double awayRating = getClubMedia(away);
                 List<Player> homeScorers = getPlayersForClub(home);
@@ -270,15 +238,15 @@ public class LeagueEngine {
             }
         }
 
-        // Guardar la ronda que se acaba de disputar
+        
         this.lastPlayedPlayoffMatches = new ArrayList<>(roundMatches);
         this.allPlayoffRoundsHistory.add(new ArrayList<>(roundMatches));
 
-        // Determinar siguiente ronda
+        
         if (currentPlayoffRound == LeaguePlayoffRound.OCTAVOS) {
             currentPlayoffRound = LeaguePlayoffRound.CUARTOS;
             currentPlayoffMatches.clear();
-            // 4 llaves de Cuartos
+            
             currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.CUARTOS, winners.get(0), winners.get(1)));
             currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.CUARTOS, winners.get(2), winners.get(3)));
             currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.CUARTOS, winners.get(4), winners.get(5)));
@@ -286,13 +254,13 @@ public class LeagueEngine {
         } else if (currentPlayoffRound == LeaguePlayoffRound.CUARTOS) {
             currentPlayoffRound = LeaguePlayoffRound.SEMIFINAL;
             currentPlayoffMatches.clear();
-            // 2 llaves de Semis
+            
             currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.SEMIFINAL, winners.get(0), winners.get(1)));
             currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.SEMIFINAL, winners.get(2), winners.get(3)));
         } else if (currentPlayoffRound == LeaguePlayoffRound.SEMIFINAL) {
             currentPlayoffRound = LeaguePlayoffRound.FINAL;
             currentPlayoffMatches.clear();
-            // Gran Final
+            
             currentPlayoffMatches.add(createPlayoffMatch(LeaguePlayoffRound.FINAL, winners.get(0), winners.get(1)));
         } else if (currentPlayoffRound == LeaguePlayoffRound.FINAL) {
             currentPlayoffRound = null;
@@ -368,14 +336,21 @@ public class LeagueEngine {
                     players.add(s.getPlayer());
                 }
             }
-            // Prioridad: Delanteros -> Mediocampo -> Defensores -> Arquero
-            players.sort((p1, p2) -> Integer.compare(positionPriority(p1.getNativePosition()), positionPriority(p2.getNativePosition())));
+            players.sort((p1, p2) -> {
+                int pComp = Integer.compare(positionPriority(p1.getNativePosition()), positionPriority(p2.getNativePosition()));
+                if (pComp != 0) return pComp;
+                return Double.compare(p2.getBaseMedia(), p1.getBaseMedia());
+            });
             for (Player p : players) {
                 kickers.add(p.getName());
             }
         } else {
-            List<Player> players = getPlayersForClub(clubName);
-            players.sort((p1, p2) -> Integer.compare(positionPriority(p1.getNativePosition()), positionPriority(p2.getNativePosition())));
+            List<Player> players = getAllPlayersForClub(clubName);
+            players.sort((p1, p2) -> {
+                int pComp = Integer.compare(positionPriority(p1.getNativePosition()), positionPriority(p2.getNativePosition()));
+                if (pComp != 0) return pComp;
+                return Double.compare(p2.getBaseMedia(), p1.getBaseMedia());
+            });
             for (Player p : players) {
                 kickers.add(p.getName());
             }
@@ -384,6 +359,16 @@ public class LeagueEngine {
             kickers.add(clubName);
         }
         return kickers;
+    }
+
+    private List<Player> getAllPlayersForClub(String clubName) {
+        List<Player> list = new ArrayList<>();
+        for (Player p : allPlayersMasterList) {
+            if (p.getClub().equalsIgnoreCase(clubName)) {
+                list.add(p);
+            }
+        }
+        return list;
     }
 
     private int positionPriority(Position pos) {
@@ -396,9 +381,7 @@ public class LeagueEngine {
         };
     }
 
-    /**
-     * Simula 90 minutos para partido de liga regular con Tu Equipo.
-     */
+    
     private MatchResult simulate90Minutes(double userRating, double opponentRating, boolean homeIsUser,
                                           List<Player> userAttackers, List<Player> rivalPlayers, String opponentName) {
         MatchResult result = new MatchResult();
@@ -429,9 +412,7 @@ public class LeagueEngine {
         return result;
     }
 
-    /**
-     * Simula 90 minutos para partido de liga regular entre dos clubes CPU.
-     */
+    
     private MatchResult simulate90MinutesCPU(double homeRating, double awayRating, String homeTeam, String awayTeam,
                                              List<Player> homeScorers, List<Player> awayScorers) {
         MatchResult result = new MatchResult();
@@ -452,9 +433,7 @@ public class LeagueEngine {
         return result;
     }
 
-    /**
-     * Simula un partido de Playoff para Tu Equipo (con alargue y penales).
-     */
+    
     private MatchResult simulatePlayoffKnockoutMatch(double userRating, double opponentRating, boolean homeIsUser,
                                                      List<Player> userAttackers, List<Player> rivalPlayers, String opponentName) {
         MatchResult result = new MatchResult();
@@ -462,7 +441,7 @@ public class LeagueEngine {
         double awayRating = homeIsUser ? opponentRating : userRating;
         double pHomeGivenGoal = MatchSimulator.calculateGoalProbability(homeRating, awayRating);
 
-        // 90 min
+        
         for (int m = 1; m <= MatchSimulator.REGULATION_MINUTES; m++) {
             if (random.nextDouble() < MatchSimulator.GOAL_PROBABILITY_PER_MINUTE) {
                 boolean homeScores = random.nextDouble() < pHomeGivenGoal;
@@ -552,9 +531,7 @@ public class LeagueEngine {
         }
     }
 
-    /**
-     * Simula un partido de Playoff entre dos clubes CPU (con alargue y penales).
-     */
+    
     private MatchResult simulatePlayoffKnockoutMatchCPU(double homeRating, double awayRating, String homeTeam, String awayTeam,
                                                         List<Player> homeScorers, List<Player> awayScorers) {
         MatchResult result = new MatchResult();
@@ -708,9 +685,7 @@ public class LeagueEngine {
         return std;
     }
 
-    /**
-     * Retorna todos los partidos de playoffs jugados por Tu Equipo a lo largo del torneo.
-     */
+    
     public List<LeaguePlayoffMatch> getUserPlayoffMatches() {
         List<LeaguePlayoffMatch> list = new ArrayList<>();
         for (List<LeaguePlayoffMatch> round : allPlayoffRoundsHistory) {
@@ -723,9 +698,7 @@ public class LeagueEngine {
         return list;
     }
 
-    /**
-     * Retorna la descripción sintética y precisa del desempeño en Playoffs.
-     */
+    
     public String getPlayoffStageSummary() {
         if (userWonLeague) {
             return "¡CAMPEÓN DE LA CHIQUILEAGUE! 🏆 Conquistó el título ganando Octavos, Cuartos, Semifinal y la Gran Final.";

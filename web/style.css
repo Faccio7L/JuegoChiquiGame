@@ -1,6 +1,4 @@
-/* ==========================================================================
-   CHIQUICUP 2026 - ESTILOS BOOTSTRAP MODERNIZADOS + RETRO FOOTBALL THEME
-   ========================================================================== */
+
 
 :root {
     --bg-main: #0b0e14;
@@ -10,10 +8,10 @@
     --text-main: #f1f5f9;
     --text-muted: #94a3b8;
     
-    /* Indicadores de posición de la regla de negocio */
-    --border-optimal: #22c55e;   /* Verde: posición óptima */
-    --border-cat: #eab308;       /* Amarillo: -3 (misma categoría) */
-    --border-diff: #ef4444;      /* Rojo: -12 (distinta categoría) */
+    
+    --border-optimal: #22c55e;   
+    --border-cat: #eab308;       
+    --border-diff: #ef4444;      
     
     --pitch-green: #112818;
     --pitch-line: rgba(255, 255, 255, 0.22);
@@ -33,7 +31,7 @@ body {
     min-height: 100vh;
 }
 
-/* Tipografías personalizadas */
+
 .font-chakra, .font-display { font-family: 'Bebas Neue', 'Barlow Condensed', sans-serif; letter-spacing: 0.8px; }
 .font-mono, .font-condensed { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: 0.5px; }
 .tracking-wide { letter-spacing: 1px; }
@@ -49,7 +47,7 @@ body {
     display: none !important;
 }
 
-/* Escudo y Logo ChiquiCup */
+
 .chiqui-logo-box {
     width: 44px;
     height: 52px;
@@ -65,9 +63,7 @@ body {
     filter: drop-shadow(0 2px 5px rgba(0,0,0,0.7));
 }
 
-/* ==========================================================================
-   CANCHA TÁCTICA (4-3-3 CON MCO ADELANTADO)
-   ========================================================================== */
+
 
 .tactical-board {
     position: relative;
@@ -83,7 +79,7 @@ body {
     overflow: hidden;
 }
 
-/* Líneas de Cancha Clásica */
+
 .pitch-lines {
     position: absolute;
     inset: 0;
@@ -130,7 +126,7 @@ body {
 .box-goal.top { top: 0; border-top: none; }
 .box-goal.bottom { bottom: 0; border-bottom: none; }
 
-/* Filas tácticas */
+
 .line-row {
     position: relative;
     z-index: 2;
@@ -165,10 +161,10 @@ body {
     justify-content: center;
 }
 
-/* Slots Tácticos con Recuadro de Color */
+
 .tactical-slot {
     background: #141820;
-    border: 2px solid #374151; /* Gris por defecto */
+    border: 2px solid #374151; 
     width: 96px;
     min-height: 64px;
     border-radius: 4px;
@@ -180,7 +176,7 @@ body {
     transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-/* Regla de negocio: verde si es óptima, amarillo si es -3, rojo si es -12 */
+
 .tactical-slot.optima {
     border: 2px solid var(--border-optimal) !important;
 }
@@ -246,9 +242,7 @@ body {
     margin-top: 1px;
 }
 
-/* ==========================================================================
-   CARTAS DE ELECCIÓN (DRAFT) - CON HOVER SUTIL Y BRILLITO ANIMADO
-   ========================================================================== */
+
 
 .choices-grid {
     display: grid;
@@ -266,16 +260,16 @@ body {
     justify-content: space-between;
     cursor: pointer;
     position: relative;
-    overflow: hidden; /* Clave para el haz de luz y partículas */
+    overflow: hidden; 
     
-    /* EFECTO HOVER PERO MUY LEVE */
+    
     transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
                 box-shadow 0.22s ease, 
                 border-color 0.22s ease,
                 background-color 0.22s ease;
 }
 
-/* Elevación de solo 2px y leve resplandor */
+
 .choice-card:hover {
     transform: translateY(-2px);
     border-color: #64748b;
@@ -307,7 +301,7 @@ body {
     line-height: 1;
 }
 
-/* Recuadro de Posición que anticipa el encaje (Verde / Amarillo / Rojo) */
+
 .choice-pos {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 0.75rem;
@@ -397,11 +391,9 @@ body {
     color: #fff;
 }
 
-/* ==========================================================================
-   BRILLITOS, DESTELLOS Y SHIMMER PARA CARTAS ESPECIALES
-   ========================================================================== */
 
-/* Barrido de brillo diagonal elegante y suave */
+
+
 @keyframes shimmerBeam {
     0% {
         transform: rotate(25deg) translateX(-180%);
@@ -411,13 +403,13 @@ body {
     }
 }
 
-/* Pulso de centelleo suave */
+
 @keyframes subtleSparkle {
     0%, 100% { opacity: 0.3; transform: scale(0.96); }
     50% { opacity: 0.85; transform: scale(1.04); }
 }
 
-/* Rayo de luz translúcido para cartas Oro, Diamante y Leyenda */
+
 .choice-card.card-oro::after,
 .choice-card.card-diamante::after,
 .choice-card.card-leyenda::after {
@@ -431,7 +423,7 @@ body {
     z-index: 1;
 }
 
-/* Partículas centelleantes en la esquina */
+
 .choice-card.card-oro::before,
 .choice-card.card-diamante::before,
 .choice-card.card-leyenda::before {
@@ -445,7 +437,7 @@ body {
     animation: subtleSparkle 2.4s infinite ease-in-out;
 }
 
-/* 1. CARTA ORO (+3) */
+
 .choice-card.card-oro {
     border: 1.5px solid #facc15 !important;
     background: linear-gradient(145deg, #241d0b 0%, #151922 65%);
@@ -466,7 +458,7 @@ body {
     text-shadow: 0 0 6px rgba(250, 204, 21, 0.8);
 }
 
-/* 2. CARTA DIAMANTE (+5) */
+
 .choice-card.card-diamante {
     border: 1.5px solid #c084fc !important;
     background: linear-gradient(145deg, #250f35 0%, #151922 65%);
@@ -487,7 +479,7 @@ body {
     text-shadow: 0 0 8px rgba(192, 132, 252, 0.8);
 }
 
-/* 3. CARTA ÍDOLO / LEYENDA */
+
 .choice-card.card-leyenda {
     border: 1.5px solid #38bdf8 !important;
     background: linear-gradient(145deg, #092638 0%, #151922 65%);
@@ -509,7 +501,7 @@ body {
     filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.9));
 }
 
-/* Badges de Rareza */
+
 .badge-rarity {
     display: inline-flex;
     align-items: center;
@@ -545,7 +537,7 @@ body {
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
 }
 
-/* Slots Tácticos con Jugador Oro / Diamante / Leyenda */
+
 .tactical-slot.slot-oro {
     box-shadow: inset 0 0 10px rgba(250, 204, 21, 0.35);
     background: linear-gradient(180deg, #261f0d 0%, #14171d 100%);
@@ -589,9 +581,7 @@ body {
     box-shadow: 0 0 6px rgba(56, 189, 248, 0.8);
 }
 
-/* ==========================================================================
-   PARTIDO EN VIVO, PENALES Y RELATO (TICKER)
-   ========================================================================== */
+
 
 .ticker-log {
     max-height: 180px;
@@ -625,7 +615,7 @@ body {
     color: #fef08a;
 }
 
-/* Definición por Penales */
+
 .pen-dots {
     display: flex;
     gap: 4px;
@@ -655,7 +645,7 @@ body {
     box-shadow: 0 0 6px #ef4444;
 }
 
-/* Portada de Veredicto / Crónica Periodística */
+
 .result-banner.win {
     background: #0f2918;
     border: 2px solid var(--border-optimal);
@@ -698,7 +688,7 @@ body {
     line-height: 1.4;
 }
 
-/* Resumen Final de Partida */
+
 .recap-match-row {
     display: flex;
     justify-content: space-between;
@@ -732,9 +722,7 @@ body {
 }
 
 
-/* ==========================================================================
-   MENÚ DE MODOS PRINCIPAL (HUB CHIQUICUP & CHIQUILEAGUE)
-   ========================================================================== */
+
 
 .max-w-700 { max-width: 700px; }
 .max-w-1000 { max-width: 1000px; }

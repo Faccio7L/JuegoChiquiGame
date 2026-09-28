@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChiquiLeague - Torneo Oficial de Liga &bull; Fútbol Argentino</title>
     <meta name="description" content="ChiquiLeague: Torneo de Liga de 30 equipos con 15 fechas, interzonal de clásicos y playoffs por el campeonato argentino.">
-    <!-- Bootstrap 5 CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700&family=Bebas+Neue&family=Rubik:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
 </head>
 <body class="bg-black text-light min-vh-100 d-flex flex-column">
 
-    <!-- Header Estilo ChiquiLeague (Limpio y directo como ChiquiCup) -->
+    
     <header class="navbar navbar-expand-lg bg-black border-bottom border-secondary-subtle px-3 py-2 sticky-top shadow-sm">
         <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div class="d-flex align-items-center gap-2">
@@ -79,7 +79,7 @@
                 </div>
             </div>
 
-            <!-- Estado del juego en el Header (Limpio y directo como ChiquiCup) -->
+            
             <div class="d-flex align-items-center gap-2 gap-sm-3 flex-wrap">
                 <div class="d-flex align-items-center gap-2 bg-dark px-3 py-1 rounded border border-secondary">
                     <span class="text-secondary small font-mono text-uppercase">Media Once:</span>
@@ -95,11 +95,11 @@
         </div>
     </header>
 
-    <!-- Contenido Principal -->
+    
     <main class="container-fluid py-3 px-2 px-md-4 flex-grow-1">
         <div class="row g-3 g-xl-4 h-100">
 
-            <!-- Columna Izquierda: Cancha Táctica idéntica a ChiquiCup -->
+            
             <section class="col-12 col-xl-6 col-xxl-6 d-flex flex-column">
                 <div class="card bg-dark border-secondary h-100 shadow">
                     <div class="card-header bg-black bg-opacity-60 border-secondary d-flex justify-content-between align-items-center py-2 px-3">
@@ -115,7 +115,7 @@
                     </div>
                     <div class="card-body p-2 p-md-3 d-flex flex-column justify-content-center">
                         <div class="tactical-board" id="tactical-pitch">
-                            <!-- Líneas de la Cancha -->
+                            
                             <div class="pitch-lines">
                                 <div class="box-penalty top"></div>
                                 <div class="box-goal top"></div>
@@ -125,7 +125,7 @@
                                 <div class="box-goal bottom"></div>
                             </div>
 
-                            <!-- Delanteros (EI, DC, ED) -->
+                            
                             <div class="line-row forwards">
                                 <div class="tactical-slot" data-slot="10" id="slot-10">
                                     <span class="pos-tag">EI</span>
@@ -141,7 +141,7 @@
                                 </div>
                             </div>
 
-                            <!-- MCO Adelantado -->
+                            
                             <div class="line-row am-line">
                                 <div class="tactical-slot" data-slot="7" id="slot-7">
                                     <span class="pos-tag">MCO</span>
@@ -149,7 +149,7 @@
                                 </div>
                             </div>
 
-                            <!-- MCs Centrales -->
+                            
                             <div class="line-row mids">
                                 <div class="tactical-slot" data-slot="5" id="slot-5">
                                     <span class="pos-tag">MC</span>
@@ -161,7 +161,7 @@
                                 </div>
                             </div>
 
-                            <!-- Defensas (LI, DFC, DFC, LD) -->
+                            
                             <div class="line-row defenders">
                                 <div class="tactical-slot" data-slot="1" id="slot-1">
                                     <span class="pos-tag">LI</span>
@@ -181,7 +181,7 @@
                                 </div>
                             </div>
 
-                            <!-- Arquero (ARQ) -->
+                            
                             <div class="line-row goalkeeper">
                                 <div class="tactical-slot" data-slot="0" id="slot-0">
                                     <span class="pos-tag">ARQ</span>
@@ -193,10 +193,10 @@
                 </div>
             </section>
 
-            <!-- Columna Derecha: Secciones Dinámicas de la Liga -->
+            
             <section class="col-12 col-xl-6 col-xxl-6 d-flex flex-column">
 
-                <!-- 1. SECCIÓN DRAFT (Rondas 1 a 11) -->
+                
                 <div id="draft-section" class="card bg-dark border-secondary h-100 shadow">
                     <div class="card-header bg-black bg-opacity-50 border-secondary d-flex justify-content-between align-items-center py-2">
                         <div class="d-flex align-items-center gap-2">
@@ -212,12 +212,12 @@
                     <div class="card-body p-3">
                         <small class="text-secondary font-mono d-block mb-3">Elegí 1 de las 4 opciones</small>
                         <div class="choices-grid" id="choices-container">
-                            <!-- Las 4 cartas se inyectan acá vía JS -->
+                            
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. SECCIÓN FASE REGULAR (15 Fechas de Liga) -->
+                
                 <div id="league-section" class="card bg-dark border-secondary h-100 shadow d-none">
                     <div class="card-header bg-black bg-opacity-50 border-secondary d-flex justify-content-between align-items-center py-2 flex-wrap gap-2">
                         <div class="d-flex align-items-center gap-2">
@@ -235,7 +235,7 @@
                     </div>
                     <div class="card-body p-3">
 
-                        <!-- Banner del Próximo Partido de Tu Equipo -->
+                        
                         <div id="user-match-preview-card" class="card bg-black border-warning border-opacity-50 p-3 mb-3 shadow-sm">
                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                                 <div>
@@ -255,7 +255,7 @@
                             </div>
                         </div>
 
-                        <!-- Marcador de Partido en Vivo en Tiempo Real -->
+                        
                         <div id="match-live-board" class="retro-scoreboard bg-black bg-opacity-70 border border-secondary rounded p-3 mb-3 shadow d-none">
                             <div class="scoreboard-main d-flex justify-content-between align-items-center py-2 px-3 bg-dark rounded border border-secondary mb-3">
                                 <div class="board-team text-center" style="width: 38%;">
@@ -271,20 +271,20 @@
                                 </div>
                             </div>
 
-                            <!-- Relato de Goles en Tiempo Real -->
+                            
                             <div class="events-log-container bg-dark bg-opacity-50 p-2 rounded border border-secondary border-opacity-50 mb-3" style="max-height: 140px; overflow-y: auto;">
                                 <div class="events-log d-flex flex-column gap-1" id="events-log">
                                     <div class="ticker-item info font-mono small text-secondary">Comienza el encuentro.</div>
                                 </div>
                             </div>
 
-                            <!-- Banner de Resultado Final del Partido -->
+                            
                             <div id="match-result-banner" class="alert alert-dark border-secondary text-center py-2 mb-0 d-none">
                                 <span class="font-chakra fw-bold fs-5" id="match-result-text">Resultado final</span>
                             </div>
                         </div>
 
-                        <!-- Pestañas para Tablas de Posiciones y Resultados -->
+                        
                         <ul class="nav nav-tabs border-secondary mb-3" id="leagueTabs" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active font-chakra text-uppercase py-2" id="tab-zona-a-btn" data-bs-toggle="tab" data-bs-target="#tab-zona-a" type="button" role="tab">
@@ -304,7 +304,7 @@
                         </ul>
 
                         <div class="tab-content" id="leagueTabsContent">
-                            <!-- TABLA ZONA A -->
+                            
                             <div class="tab-pane fade show active" id="tab-zona-a" role="tabpanel">
                                 <div class="table-responsive">
                                     <table class="table table-dark table-hover table-sm align-middle league-table mb-1">
@@ -323,14 +323,14 @@
                                             </tr>
                                         </thead>
                                         <tbody id="standings-a-body">
-                                            <!-- Inyectado por JS -->
+                                            
                                         </tbody>
                                     </table>
                                 </div>
                                 <small class="text-secondary font-mono d-block mt-1">1º al 8º clasifican a playoffs</small>
                             </div>
 
-                            <!-- TABLA ZONA B -->
+                            
                             <div class="tab-pane fade" id="tab-zona-b" role="tabpanel">
                                 <div class="table-responsive">
                                     <table class="table table-dark table-hover table-sm align-middle league-table mb-1">
@@ -349,17 +349,17 @@
                                             </tr>
                                         </thead>
                                         <tbody id="standings-b-body">
-                                            <!-- Inyectado por JS -->
+                                            
                                         </tbody>
                                     </table>
                                 </div>
                                 <small class="text-secondary font-mono d-block mt-1">1º al 8º clasifican a playoffs</small>
                             </div>
 
-                            <!-- PARTIDOS DE LA FECHA -->
+                            
                             <div class="tab-pane fade" id="tab-fecha-matches" role="tabpanel">
                                 <div class="row g-2" id="fecha-matches-container">
-                                    <!-- Inyectado por JS -->
+                                    
                                 </div>
                             </div>
                         </div>
@@ -367,7 +367,7 @@
                     </div>
                 </div>
 
-                <!-- 3. SECCIÓN PLAYOFFS (Octavos, Cuartos, Semis, Final) + TABLAS SIEMPRE DISPONIBLES -->
+                
                 <div id="playoff-section" class="card bg-dark border-secondary h-100 shadow d-none">
                     <div class="card-header bg-black bg-opacity-50 border-secondary d-flex justify-content-between align-items-center py-2 flex-wrap gap-2">
                         <div class="d-flex align-items-center gap-2">
@@ -380,7 +380,7 @@
                     </div>
                     <div class="card-body p-3">
 
-                        <!-- Selector de Vistas: Cuadro de Playoffs o Tablas de Posiciones de la Liga -->
+                        
                         <ul class="nav nav-pills border-secondary mb-3 gap-2" id="playoffViewNav" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active font-chakra text-uppercase py-1 px-3 border border-secondary" id="nav-bracket-btn" data-bs-toggle="pill" data-bs-target="#view-playoff-bracket" type="button" role="tab">
@@ -395,13 +395,13 @@
                         </ul>
 
                         <div class="tab-content" id="playoffViewContent">
-                            <!-- VISTA 1: CRUCES DE PLAYOFFS -->
+                            
                             <div class="tab-pane fade show active" id="view-playoff-bracket" role="tabpanel">
 
-                                <!-- Mensaje discreto si no clasificó -->
+                                
                                 <div id="playoff-user-status-card" class="d-none"></div>
 
-                                <!-- Próximo cruce eliminatorio con las dos medias visibles -->
+                                
                                 <div id="playoff-next-match-box" class="card bg-black border-warning border-opacity-50 p-3 mb-3 shadow-sm d-none">
                                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                                         <div>
@@ -421,7 +421,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Marcador en Vivo de Playoffs -->
+                                
                                 <div id="playoff-live-board" class="retro-scoreboard bg-black bg-opacity-70 border border-secondary rounded p-3 mb-3 shadow d-none">
                                     <div class="scoreboard-main d-flex justify-content-between align-items-center py-2 px-3 bg-dark rounded border border-secondary mb-3">
                                         <div class="board-team text-center" style="width: 38%;">
@@ -437,7 +437,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Tanda de Penales en Playoffs -->
+                                    
                                     <div id="playoff-penalties-display" class="bg-dark p-3 rounded border border-warning mb-3 d-none">
                                         <div class="pen-header-title font-chakra text-warning fw-bold text-center mb-2">DEFINICIÓN POR PENALES</div>
                                         <div class="d-flex justify-content-between align-items-center mb-2 px-2">
@@ -451,29 +451,30 @@
                                                 <div class="pen-dots d-flex gap-1 justify-content-end mt-1" id="playoff-pen-away-dots"></div>
                                             </div>
                                         </div>
+                                        <div class="pen-status-line text-secondary font-mono small text-center" id="playoff-pen-status-line">Preparando la serie...</div>
                                     </div>
 
-                                    <!-- Relato de Goles en Playoffs -->
+                                    
                                     <div class="events-log-container bg-dark bg-opacity-50 p-2 rounded border border-secondary border-opacity-50 mb-3" style="max-height: 140px; overflow-y: auto;">
                                         <div class="events-log d-flex flex-column gap-1" id="playoff-events-log">
-                                            <!-- Inyectado por JS -->
+                                            
                                         </div>
                                     </div>
 
-                                    <!-- Banner de Resultado del Playoff -->
+                                    
                                     <div id="playoff-result-banner" class="alert alert-dark border-secondary text-center py-2 mb-0 d-none">
                                         <span class="font-chakra fw-bold fs-5" id="playoff-result-text">Resultado</span>
                                     </div>
                                 </div>
 
-                                <!-- Llaves de la ronda de playoffs actual -->
+                                
                                 <h3 class="h6 font-chakra text-uppercase text-secondary tracking-wide mb-2">Llaves de la Ronda:</h3>
                                 <div class="row g-2 mb-3" id="playoff-bracket-container">
-                                    <!-- Inyectado por JS -->
+                                    
                                 </div>
                             </div>
 
-                            <!-- VISTA 2: TABLAS DE POSICIONES (DISPONIBLES ANTES, DURANTE Y DESPUÉS DE PLAYOFFS) -->
+                            
                             <div class="tab-pane fade" id="view-playoff-standings" role="tabpanel">
                                 <ul class="nav nav-tabs border-secondary mb-3" id="playoffStandingsTabs" role="tablist">
                                     <li class="nav-item" role="presentation">
@@ -506,7 +507,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="playoff-standings-a-body">
-                                                    <!-- Inyectado por JS -->
+                                                    
                                                 </tbody>
                                             </table>
                                         </div>
@@ -530,7 +531,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="playoff-standings-b-body">
-                                                    <!-- Inyectado por JS -->
+                                                    
                                                 </tbody>
                                             </table>
                                         </div>
@@ -540,10 +541,10 @@
                             </div>
                         </div>
 
-                        <!-- PANEL DE FIN DE PARTIDA / RESUMEN DE CAMPAÑA (ESTILO CHIQUICUP) -->
+                        
                         <div id="game-over-panel" class="game-over-panel bg-dark p-3 rounded border border-warning text-center d-none shadow my-3">
                             <div class="run-recap-box mb-3" id="run-recap-content">
-                                <!-- Inyectado dinámicamente con el mismo formato que ChiquiCup -->
+                                
                             </div>
                             <div class="game-over-actions d-flex gap-2 justify-content-center flex-wrap">
                                 <button id="btn-share-run" class="btn btn-outline-info font-chakra fw-bold flex-grow-1">
@@ -563,7 +564,7 @@
         </div>
     </main>
 
-    <!-- Footer -->
+    
     <footer class="retro-footer bg-black border-top border-secondary-subtle py-3 px-3 mt-auto">
         <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2 font-mono small text-secondary">
             <span>CHIQUI LEAGUE &bull; 30 EQUIPOS &bull; 15 FECHAS &bull; PLAYOFFS</span>
@@ -575,9 +576,9 @@
         </div>
     </footer>
 
-    <!-- Bootstrap 5 Bundle JS -->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Script de ChiquiLeague -->
+    
     <script src="chiquileague.js"></script>
 </body>
 </html>

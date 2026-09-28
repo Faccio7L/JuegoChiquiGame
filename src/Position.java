@@ -1,9 +1,4 @@
-/**
- * Posición específica de un jugador dentro de la cancha.
- * Cada posición específica pertenece a una {@link PositionCategory} general,
- * usada para calcular penalizaciones cuando un jugador ocupa un lugar
- * distinto al suyo.
- */
+
 public enum Position {
     ARQ(PositionCategory.ARQUERO),
 

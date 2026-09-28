@@ -1,9 +1,6 @@
 import java.util.Objects;
 
-/**
- * Un jugador ofrecido durante el draft.
- * Soporta rarezas especiales (ORO +3 de media, DIAMANTE +5 de media).
- */
+
 public class Player {
 
     private final String name;
@@ -56,9 +53,7 @@ public class Player {
         return rarity.getBonusMedia();
     }
 
-    /**
-     * Media base efectiva sumando el bono por rareza (+3 ORO, +5 DIAMANTE).
-     */
+    
     public double getEffectiveBaseMedia() {
         return baseMedia + rarity.getBonusMedia();
     }

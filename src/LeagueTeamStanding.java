@@ -1,11 +1,6 @@
 import java.util.Objects;
 
-/**
- * CLASE EXCLUSIVA DE CHIQUILEAGUE (NO UTILIZADA EN CHIQUICUP)
- *
- * Representa la posición y estadística de un club dentro de su zona en la ChiquiLeague:
- * Puntos (3 por victoria, 1 por empate, 0 por derrota), PJ, PG, PE, PP, GF, GC y Diferencia de Gol.
- */
+
 public class LeagueTeamStanding implements Comparable<LeagueTeamStanding> {
 
     private final String teamName;
@@ -94,19 +89,19 @@ public class LeagueTeamStanding implements Comparable<LeagueTeamStanding> {
 
     @Override
     public int compareTo(LeagueTeamStanding o) {
-        // 1. Puntos descendente
+        
         int ptsComp = Integer.compare(o.getPoints(), this.getPoints());
         if (ptsComp != 0) return ptsComp;
 
-        // 2. Diferencia de gol descendente
+        
         int diffComp = Integer.compare(o.getGoalDifference(), this.getGoalDifference());
         if (diffComp != 0) return diffComp;
 
-        // 3. Goles a favor descendente
+        
         int gfComp = Integer.compare(o.getGoalsFor(), this.getGoalsFor());
         if (gfComp != 0) return gfComp;
 
-        // 4. Nombre alfabético
+        
         return this.teamName.compareToIgnoreCase(o.teamName);
     }
 

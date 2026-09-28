@@ -1,7 +1,4 @@
-/**
- * Representa el evento de un gol en un minuto específico del partido,
- * indicando qué equipo convirtió y opcionalmente el autor del gol.
- */
+
 public class GoalEvent {
 
     private final int minute;
