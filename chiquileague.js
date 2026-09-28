@@ -462,10 +462,13 @@ function renderLeagueRegular() {
 
     const nextUserMatch = leagueState.league.currentUserMatch;
     const currentMdNum = leagueState.league.currentMatchdayNumber;
+    const previewCard = document.getElementById('user-match-preview-card');
+    const playBtn = document.getElementById('btn-play-fecha');
 
-    if (mdTitle) mdTitle.textContent = `FECHA ${currentMdNum} / 15`;
+    if (mdTitle) mdTitle.textContent = `FECHA ${Math.min(currentMdNum, 15)} / 15`;
 
-    if (nextUserMatch) {
+    if (nextUserMatch && !leagueState.league.regularSeasonFinished) {
+        if (previewCard) previewCard.classList.remove('d-none');
         const isHomeUser = isUserTeam(nextUserMatch.homeTeam);
         const homeDisplayName = isHomeUser ? getTeamName() : nextUserMatch.homeTeam;
         const awayDisplayName = !isHomeUser ? getTeamName() : nextUserMatch.awayTeam;
@@ -476,6 +479,10 @@ function renderLeagueRegular() {
         if (homeRating) homeRating.textContent = isHomeUser ? `${Math.round(leagueState.effectiveTeamRating)}` : getClubRating(nextUserMatch.homeTeam);
         if (awayRating) awayRating.textContent = !isHomeUser ? `${Math.round(leagueState.effectiveTeamRating)}` : getClubRating(nextUserMatch.awayTeam);
 
+        if (playBtn) {
+            playBtn.innerHTML = `<i class="bi bi-play-fill me-1"></i> JUGAR FECHA ${currentMdNum}`;
+        }
+
         if (derbyInd) {
             if (nextUserMatch.isInterzonal) {
                 derbyInd.classList.remove('d-none');
@@ -483,6 +490,8 @@ function renderLeagueRegular() {
                 derbyInd.classList.add('d-none');
             }
         }
+    } else {
+        if (previewCard) previewCard.classList.add('d-none');
     }
 
     renderLastPlayedMatches();
@@ -598,6 +607,7 @@ async function playNextMatchdayRealTime() {
     isSimulating = true;
 
     const playBtn = document.getElementById('btn-play-fecha');
+    const previewCard = document.getElementById('user-match-preview-card');
     const liveBoard = document.getElementById('match-live-board');
     const homeScoreEl = document.getElementById('live-home-score');
     const awayScoreEl = document.getElementById('live-away-score');
@@ -609,12 +619,14 @@ async function playNextMatchdayRealTime() {
     const resultText = document.getElementById('match-result-text');
 
     if (playBtn) playBtn.disabled = true;
+    if (previewCard) previewCard.classList.add('d-none');
 
     try {
         const res = await fetch('/api/league/play-matchday', { method: 'POST' });
         if (!res.ok) {
             isSimulating = false;
             if (playBtn) playBtn.disabled = false;
+            if (previewCard) previewCard.classList.remove('d-none');
             return;
         }
 
@@ -700,6 +712,7 @@ async function playNextMatchdayRealTime() {
         renderLastPlayedMatches();
 
         if (leagueState.league.regularSeasonFinished) {
+            if (previewCard) previewCard.classList.add('d-none');
             await sleep(1500);
             renderFullState();
 
@@ -710,6 +723,9 @@ async function playNextMatchdayRealTime() {
                     tab.show();
                 }
             }
+        } else {
+            renderLeagueRegular();
+            if (previewCard) previewCard.classList.remove('d-none');
         }
 
     } catch (err) {
@@ -717,6 +733,9 @@ async function playNextMatchdayRealTime() {
     } finally {
         isSimulating = false;
         if (playBtn) playBtn.disabled = false;
+        if (leagueState && leagueState.league && !leagueState.league.regularSeasonFinished) {
+            if (previewCard) previewCard.classList.remove('d-none');
+        }
         updateSpeedButtonsVisibility();
     }
 }
@@ -814,6 +833,7 @@ async function playNextPlayoffRealTime() {
     isSimulating = true;
 
     const playBtn = document.getElementById('btn-play-playoff');
+    const nextMatchBox = document.getElementById('playoff-next-match-box');
     const liveBoard = document.getElementById('playoff-live-board');
     const homeScoreEl = document.getElementById('playoff-live-home-score');
     const awayScoreEl = document.getElementById('playoff-live-away-score');
@@ -831,6 +851,7 @@ async function playNextPlayoffRealTime() {
     const resultText = document.getElementById('playoff-result-text');
 
     if (playBtn) playBtn.disabled = true;
+    if (nextMatchBox) nextMatchBox.classList.add('d-none');
 
     try {
         const res = await fetch('/api/league/play-playoff', { method: 'POST' });
