@@ -12,11 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function getTeamName() {
-    if (leagueState && leagueState.userTeamName) return leagueState.userTeamName;
     const urlParams = new URLSearchParams(window.location.search);
     const p = urlParams.get('name');
     if (p && p.trim()) return p.trim();
-    return localStorage.getItem('userTeamName') || 'ChiquiTeam';
+    const saved = localStorage.getItem('userTeamName');
+    if (saved && saved.trim() && saved !== 'Tu Equipo') return saved.trim();
+    if (leagueState && leagueState.userTeamName) return leagueState.userTeamName;
+    return 'ChiquiTeam';
 }
 
 function isUserTeam(team) {
@@ -129,7 +131,7 @@ async function loadLeagueState() {
         const teamName = getTeamName();
         localStorage.setItem('userTeamName', teamName);
 
-        const res = await fetch('/api/league/state');
+        const res = await fetch('/api/league/state?name=' + encodeURIComponent(teamName));
         if (res.ok) {
             leagueState = await res.json();
             

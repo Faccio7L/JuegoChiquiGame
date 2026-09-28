@@ -1044,7 +1044,9 @@
         } else if (path === '/api/league/reroll') {
             data = rerollLeagueChoices();
         } else if (path === '/api/league/state') {
-            if (!leagueStateObj) initLeagueState(nameParam);
+            if (!leagueStateObj || (nameParam && leagueStateObj.userTeam && leagueStateObj.userTeam.name !== nameParam)) {
+                initLeagueState(nameParam);
+            }
             data = buildLeagueStateJson();
         } else if (path === '/api/league/play-matchday') {
             data = playLeagueMatchday();
