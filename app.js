@@ -3,8 +3,7 @@ let gameState = null;
 let isSimulatingMatch = false;
 let simulationSpeedMultiplier = 1; 
 let cupRunHistory = [];
-let bonusModalInstance = null;
-let bonusCountdownInterval = null;
+
 
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
@@ -62,14 +61,7 @@ function setupEventListeners() {
         });
     }
 
-    const bonusBtn = document.getElementById('btn-bonus-reroll');
-    if (bonusBtn) {
-        bonusBtn.addEventListener('click', openBonusRerollModal);
-    }
-    const claimBonusBtn = document.getElementById('btn-claim-bonus-reroll');
-    if (claimBonusBtn) {
-        claimBonusBtn.addEventListener('click', claimBonusReroll);
-    }
+
 }
 
 async function startNewGame() {
@@ -250,23 +242,7 @@ function renderDraft() {
             : 'No te quedan más sorteos disponibles';
     }
 
-    const bonusBtn = document.getElementById('btn-bonus-reroll');
-    const bonusBadge = document.getElementById('bonus-reroll-badge');
-    const bonusRemaining = gameState.bonusRerollsRemaining !== undefined ? gameState.bonusRerollsRemaining : 3;
 
-    if (bonusBadge) bonusBadge.textContent = `${bonusRemaining}`;
-
-    if (remaining <= 0 && bonusRemaining > 0 && !gameState.draftFinished) {
-        if (bonusBtn) {
-            bonusBtn.classList.remove('d-none');
-            bonusBtn.classList.add('d-inline-flex');
-        }
-    } else {
-        if (bonusBtn) {
-            bonusBtn.classList.remove('d-inline-flex');
-            bonusBtn.classList.add('d-none');
-        }
-    }
 
     gameState.choices.forEach((player, idx) => {
         
@@ -328,55 +304,6 @@ async function pickPlayer(index) {
     }
 }
 
-function openBonusRerollModal() {
-    const modalEl = document.getElementById('bonusRerollModal');
-    if (!modalEl) return;
-    if (!bonusModalInstance) {
-        bonusModalInstance = new bootstrap.Modal(modalEl);
-    }
-    const claimBtn = document.getElementById('btn-claim-bonus-reroll');
-    if (claimBtn) {
-        claimBtn.disabled = true;
-        let count = 3;
-        claimBtn.innerHTML = `<i class="bi bi-hourglass-split me-1"></i> ESPERÁ <span id="bonus-countdown">${count}</span>s...`;
-        if (bonusCountdownInterval) clearInterval(bonusCountdownInterval);
-        bonusCountdownInterval = setInterval(() => {
-            count--;
-            const countSpan = document.getElementById('bonus-countdown');
-            if (countSpan) countSpan.textContent = `${count}`;
-            if (count <= 0) {
-                clearInterval(bonusCountdownInterval);
-                claimBtn.disabled = false;
-                claimBtn.innerHTML = `<i class="bi bi-gift-fill me-1"></i> ¡RECLAMAR +1 RE-SORTEO AHORA!`;
-            }
-        }, 1000);
-    }
-    bonusModalInstance.show();
-}
-
-async function claimBonusReroll() {
-    const claimBtn = document.getElementById('btn-claim-bonus-reroll');
-    if (claimBtn) claimBtn.disabled = true;
-    try {
-        const res = await fetch('/api/draft/bonus-reroll', { method: 'POST' });
-        if (res.ok) {
-            gameState = await res.json();
-            if (bonusModalInstance) bonusModalInstance.hide();
-            renderFullState();
-            const toast = document.getElementById('share-toast');
-            if (toast) {
-                toast.textContent = '¡Ganaste +1 Re-sorteo extra! 🎲';
-                toast.classList.remove('hidden');
-                setTimeout(() => toast.classList.add('hidden'), 2500);
-            }
-        } else {
-            const err = await res.json();
-            alert(err.error || 'No se pudo acreditar el re-sorteo extra');
-        }
-    } catch (err) {
-        console.error('Error al reclamar re-sorteo:', err);
-    }
-}
 
 async function rerollDraftChoices() {
     if (!gameState || gameState.draftFinished) return;
